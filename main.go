@@ -15,7 +15,9 @@ func main() {
 		Username:  os.Getenv("ISERV_USERNAME"),
 		Password:  os.Getenv("ISERV_PASSWORD"),
 	}, &iserv.IServClientOptions{
+		EnableWeb:   true,
 		EnableEmail: true,
+		EnableFiles: true,
 	})
 	if err != nil {
 		fmt.Printf("Error: %s", err.Error())
@@ -23,8 +25,8 @@ func main() {
 	}
 	defer client.Logout()
 
-	// badges
-	badges, err := client.GetBadges()
+	// web
+	badges, err := client.WebClient.GetBadges()
 	if err != nil {
 		fmt.Printf("Error: %s", err.Error())
 		return
@@ -48,5 +50,14 @@ func main() {
 	}
 	for _, m := range messages {
 		fmt.Printf(" = '%s' from %s\n", m.Envelope.Subject, m.Envelope.Sender[0].Address())
+	}
+
+	// files
+	files, err := client.FilesClient.ReadDir("/Groups")
+	if err != nil {
+		return
+	}
+	for _, f := range files {
+		fmt.Println(f.Name())
 	}
 }

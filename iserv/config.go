@@ -7,6 +7,8 @@ type IServAccountConfig struct {
 }
 
 type IServClientOptions struct {
+	EnableWeb   bool
 	EnableEmail bool
+	EnableFiles bool
 	AgentString string
 }

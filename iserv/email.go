@@ -30,6 +30,10 @@ func (c *IServEmailClient) Login(config *IServAccountConfig) error {
 	return nil
 }
 
+func (c *IServEmailClient) Logout() error {
+	return c.ImapClient.Logout()
+}
+
 func (c *IServEmailClient) ListMailboxes() ([]imap.MailboxInfo, error) {
 	mailboxes := make(chan *imap.MailboxInfo, 10)
 	done := make(chan error, 1)
@@ -79,8 +83,4 @@ func (c *IServEmailClient) ReadMailbox(name string, limit uint32) ([]imap.Messag
 	}
 
 	return res, nil
-}
-
-func (c *IServEmailClient) Logout() error {
-	return c.ImapClient.Logout()
 }
