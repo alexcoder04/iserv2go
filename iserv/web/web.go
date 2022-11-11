@@ -1,7 +1,6 @@
 package web
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -71,43 +70,3 @@ func (c *IServWebClient) Login(config *types.IServAccountConfig, agentString str
 
 	return nil
 }
-
-func (c *IServWebClient) DoGetRequest(url string) ([]byte, error) {
-	res, err := c.HttpClient.Get(c.IServUrl + url)
-	if err != nil {
-		return []byte{}, err
-	}
-	defer res.Body.Close()
-
-	return ioutil.ReadAll(res.Body)
-}
-
-func (c *IServWebClient) GetBadges() (map[string]int, error) {
-	data, err := c.DoGetRequest("/app/navigation/badges")
-	if err != nil {
-		return map[string]int{}, err
-	}
-
-	resData := map[string]int{}
-	err = json.Unmarshal(data, &resData)
-	return resData, err
-}
-
-//func (c *IServWebClient) GetExercises() ([]IServExercise, error) {
-//	res, err := c.HttpClient.Get(c.Config.IServURL + "app/navigation/badges")
-//	if err != nil {
-//		return []IServExercise{}, err
-//	}
-//	defer res.Body.Close()
-//
-//	doc, err := goquery.NewDocumentFromReader(res.Body)
-//	if err != nil {
-//		return []IServExercise{}, err
-//	}
-//	tasksTable := doc.Find("#crud-table")
-//	fmt.Println(tasksTable)
-//	for _, tr := range tasksTable.Filter("tr").Nodes {
-//		fmt.Println(tr)
-//	}
-//	return []IServExercise{}, nil
-//}

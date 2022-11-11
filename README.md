@@ -51,3 +51,8 @@ func main(){
     }
 }
 ```
+
+## Project Structure
+
+The `iserv` folder contains the Go Library, the subfolders `email`, `files`, `web` are modules, which can be (de-)activated.
+They contain each a `user.go` files, which includes all the functions meant to be used by end-user.
