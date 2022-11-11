@@ -5,10 +5,13 @@ import (
 	"os"
 
 	"github.com/alexcoder04/iserv2go/iserv"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	client := iserv.IServClient{}
+
+	godotenv.Load()
 
 	err := client.Login(&iserv.IServAccountConfig{
 		IServHost: os.Getenv("ISERV_HOST"),
@@ -44,7 +47,7 @@ func main() {
 		fmt.Printf(" * %s\n", m.Name)
 	}
 
-	messages, err := client.EmailClient.ReadMailbox("INBOX/Wettbewerbe", 10)
+	messages, err := client.EmailClient.ReadMailbox("INBOX/Sent", 10)
 	if err != nil {
 		return
 	}
