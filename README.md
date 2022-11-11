@@ -39,12 +39,12 @@ func main(){
     }
     defer client.Logout()
 
-	messages, err := client.EmailClient.ReadMailbox("INBOX", 10)
-	if err != nil {
-		return
-	}
-	for _, m := range messages {
-		fmt.Printf(" = '%s' from %s\n", m.Envelope.Subject, m.Envelope.Sender[0].Address())
-	}
+    messages, err := client.EmailClient.ReadMailbox("INBOX", 10)
+    if err != nil {
+        return
+    }
+    for _, m := range messages {
+        fmt.Printf(" = '%s' from %s\n", m.Envelope.Subject, m.Envelope.Sender[0].Address())
+    }
 }
 ```

@@ -8,10 +8,22 @@ import (
 	"github.com/joho/godotenv"
 )
 
+func init() {
+	godotenv.Load()
+}
+
+// include in friendly
+func Die(message string, args ...any) {
+	fmt.Printf("Fatal error: "+message+"\n", args...)
+	os.Exit(1)
+}
+
+func Warn(message string, args ...any) {
+	fmt.Printf("Warning: "+message+"\n", args...)
+}
+
 func main() {
 	client := iserv.IServClient{}
-
-	godotenv.Load()
 
 	err := client.Login(&iserv.IServAccountConfig{
 		IServHost: os.Getenv("ISERV_HOST"),
@@ -23,17 +35,16 @@ func main() {
 		EnableFiles: true,
 	})
 	if err != nil {
-		fmt.Printf("Error: %s", err.Error())
-		return
+		Die("Cannot login: %s", err.Error())
 	}
 	defer client.Logout()
 
 	// web
 	badges, err := client.WebClient.GetBadges()
 	if err != nil {
-		fmt.Printf("Error: %s", err.Error())
-		return
+		Warn("Cannot load badges: %s", err.Error())
 	}
+	fmt.Println("Badges:")
 	for key, value := range badges {
 		fmt.Printf("%s: %d\n", key, value)
 	}
@@ -41,15 +52,15 @@ func main() {
 	// email
 	mailboxes, err := client.EmailClient.ListMailboxes()
 	if err != nil {
-		return
+		Warn("Cannot load email mailboxes: %s", err.Error())
 	}
 	for _, m := range mailboxes {
 		fmt.Printf(" * %s\n", m.Name)
 	}
 
-	messages, err := client.EmailClient.ReadMailbox("INBOX/Sent", 10)
+	messages, err := client.EmailClient.ReadMailbox("INBOX", 10)
 	if err != nil {
-		return
+		Warn("Cannot read messages: %s", err.Error())
 	}
 	for _, m := range messages {
 		fmt.Printf(" = '%s' from %s\n", m.Envelope.Subject, m.Envelope.Sender[0].Address())
@@ -58,7 +69,7 @@ func main() {
 	// files
 	files, err := client.FilesClient.ReadDir("/Groups")
 	if err != nil {
-		return
+		Warn("Cannot read groups: %s", err.Error())
 	}
 	for _, f := range files {
 		fmt.Println(f.Name())
