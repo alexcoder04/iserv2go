@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/alexcoder04/iserv2go/iserv"
+	"github.com/alexcoder04/iserv2go/iserv/types"
 	"github.com/joho/godotenv"
 )
 
@@ -25,11 +26,11 @@ func Warn(message string, args ...any) {
 func main() {
 	client := iserv.IServClient{}
 
-	err := client.Login(&iserv.IServAccountConfig{
+	err := client.Login(&types.IServAccountConfig{
 		IServHost: os.Getenv("ISERV_HOST"),
 		Username:  os.Getenv("ISERV_USERNAME"),
 		Password:  os.Getenv("ISERV_PASSWORD"),
-	}, &iserv.IServClientOptions{
+	}, &types.IServClientOptions{
 		EnableWeb:   true,
 		EnableEmail: true,
 		EnableFiles: true,

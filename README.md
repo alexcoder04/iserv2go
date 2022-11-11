@@ -3,7 +3,7 @@
 
 Unofficial IServ Go library and CLI.
 
-**Disclaimer 1**: I am not affiliated with the [IServ GmbH](https://iserv.eu/) in any way.
+**Disclaimer 1**: I am **not** affiliated with the [IServ GmbH](https://iserv.eu/) in any way.
 
 **Disclaimer 2**: This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
@@ -20,16 +20,19 @@ go get github.com/alexcoder04/iserv2go/iserv
 ```go
 package main
 
-import "github.com/alexcoder04/iserv2go/iserv"
+import (
+    "github.com/alexcoder04/iserv2go/iserv"
+    "github.com/alexcoder04/iserv2go/iserv/types"
+)
 
 func main(){
     client := iserv.IServClient{}
 
-    err := client.Login(&iserv.IServAccountConfig{
+    err := client.Login(&types.IServAccountConfig{
 		IServHost: os.Getenv("ISERV_HOST"),
 		Username:  os.Getenv("ISERV_USERNAME"),
 		Password:  os.Getenv("ISERV_PASSWORD"),
-	}, &iserv.IServClientOptions{
+	}, &types.IServClientOptions{
 		EnableWeb:   false,
 		EnableEmail: true,
 		EnableFiles: false,

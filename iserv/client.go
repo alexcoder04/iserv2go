@@ -1,22 +1,29 @@
 package iserv
 
-type IServClient struct {
-	Config        *IServAccountConfig
-	ClientOptions *IServClientOptions
+import (
+	"github.com/alexcoder04/iserv2go/iserv/email"
+	"github.com/alexcoder04/iserv2go/iserv/files"
+	"github.com/alexcoder04/iserv2go/iserv/types"
+	"github.com/alexcoder04/iserv2go/iserv/web"
+)
 
-	EmailClient *IServEmailClient
-	FilesClient *IServFilesClient
-	WebClient   *IServWebClient
+type IServClient struct {
+	Config        *types.IServAccountConfig
+	ClientOptions *types.IServClientOptions
+
+	EmailClient *email.IServEmailClient
+	FilesClient *files.IServFilesClient
+	WebClient   *web.IServWebClient
 }
 
-func (c *IServClient) Login(ac *IServAccountConfig, cc *IServClientOptions) error {
+func (c *IServClient) Login(ac *types.IServAccountConfig, cc *types.IServClientOptions) error {
 	c.Config = ac
 	c.ClientOptions = cc
 
 	// login modules
 
 	if c.ClientOptions.EnableWeb {
-		c.WebClient = &IServWebClient{}
+		c.WebClient = &web.IServWebClient{}
 		err := c.WebClient.Login(c.Config, c.ClientOptions.AgentString)
 		if err != nil {
 			return err
@@ -24,7 +31,7 @@ func (c *IServClient) Login(ac *IServAccountConfig, cc *IServClientOptions) erro
 	}
 
 	if c.ClientOptions.EnableEmail {
-		c.EmailClient = &IServEmailClient{}
+		c.EmailClient = &email.IServEmailClient{}
 		err := c.EmailClient.Login(c.Config)
 		if err != nil {
 			return err
@@ -32,7 +39,7 @@ func (c *IServClient) Login(ac *IServAccountConfig, cc *IServClientOptions) erro
 	}
 
 	if c.ClientOptions.EnableFiles {
-		c.FilesClient = &IServFilesClient{}
+		c.FilesClient = &files.IServFilesClient{}
 		err := c.FilesClient.Login(c.Config)
 		if err != nil {
 			return err

@@ -1,18 +1,19 @@
-package iserv
+package email
 
 import (
 	"fmt"
 
+	"github.com/alexcoder04/iserv2go/iserv/types"
 	"github.com/emersion/go-imap"
 	"github.com/emersion/go-imap/client"
 )
 
 type IServEmailClient struct {
-	Config     *IServAccountConfig
+	Config     *types.IServAccountConfig
 	ImapClient *client.Client
 }
 
-func (c *IServEmailClient) Login(config *IServAccountConfig) error {
+func (c *IServEmailClient) Login(config *types.IServAccountConfig) error {
 	c.Config = config
 
 	conn, err := client.DialTLS(fmt.Sprintf("%s:993", c.Config.IServHost), nil)

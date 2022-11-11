@@ -1,5 +1,8 @@
-package iserv
+package types
 
+import "time"
+
+// config
 type IServAccountConfig struct {
 	IServHost string
 	Username  string
@@ -11,4 +14,13 @@ type IServClientOptions struct {
 	EnableEmail bool
 	EnableFiles bool
 	AgentString string
+}
+
+// other
+type IServExercise struct {
+	Type    string
+	Title   string
+	DueDate time.Time
+	Tags    []string
+	Teacher string
 }

@@ -1,4 +1,4 @@
-package iserv
+package web
 
 import (
 	"encoding/json"
@@ -9,17 +9,18 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/alexcoder04/iserv2go/iserv/types"
 	"golang.org/x/net/publicsuffix"
 )
 
 type IServWebClient struct {
-	Config      *IServAccountConfig
+	Config      *types.IServAccountConfig
 	AgentString string
 	IServUrl    string
 	HttpClient  *http.Client
 }
 
-func (c *IServWebClient) Login(config *IServAccountConfig, agentString string) error {
+func (c *IServWebClient) Login(config *types.IServAccountConfig, agentString string) error {
 	c.Config = config
 	c.AgentString = agentString
 
@@ -71,14 +72,18 @@ func (c *IServWebClient) Login(config *IServAccountConfig, agentString string) e
 	return nil
 }
 
-func (c *IServWebClient) GetBadges() (map[string]int, error) {
-	res, err := c.HttpClient.Get(c.IServUrl + "/app/navigation/badges")
+func (c *IServWebClient) DoGetRequest(url string) ([]byte, error) {
+	res, err := c.HttpClient.Get(c.IServUrl + url)
 	if err != nil {
-		return map[string]int{}, err
+		return []byte{}, err
 	}
 	defer res.Body.Close()
 
-	data, err := ioutil.ReadAll(res.Body)
+	return ioutil.ReadAll(res.Body)
+}
+
+func (c *IServWebClient) GetBadges() (map[string]int, error) {
+	data, err := c.DoGetRequest("/app/navigation/badges")
 	if err != nil {
 		return map[string]int{}, err
 	}
