@@ -7,6 +7,8 @@ Unofficial IServ Go library and CLI.
 
 **Disclaimer 2**: This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the [GNU Affero General Public License](./LICENSE) for more details.
 
+**Disclaimer 3**: Use it at YOUR OWN RISK!
+
 ## Use as CLI
 
 **Work in progress**
