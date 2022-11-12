@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
@@ -9,8 +10,15 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var (
+	EnableEmail *bool = flag.Bool("enable-email", false, "whether to enable email module")
+	EnableFiles *bool = flag.Bool("enable-files", false, "whether to enable files module")
+	EnableWeb   *bool = flag.Bool("enable-web", false, "whether to enable web module")
+)
+
 func init() {
 	godotenv.Load()
+	flag.Parse()
 }
 
 // include in friendly
@@ -28,12 +36,12 @@ func main() {
 
 	err := client.Login(&types.IServAccountConfig{
 		IServHost: os.Getenv("ISERV_HOST"),
-		Username:  os.Getenv("ISERV_USERNAME"),
 		Password:  os.Getenv("ISERV_PASSWORD"),
+		Username:  os.Getenv("ISERV_USERNAME"),
 	}, &types.IServClientOptions{
-		EnableWeb:   true,
-		EnableEmail: true,
-		EnableFiles: true,
+		EnableEmail: *EnableEmail,
+		EnableFiles: *EnableFiles,
+		EnableWeb:   *EnableWeb,
 	})
 	if err != nil {
 		Die("Cannot login: %s", err.Error())
@@ -41,47 +49,55 @@ func main() {
 	defer client.Logout()
 
 	// web
-	badges, err := client.WebClient.GetBadges()
-	if err != nil {
-		Warn("Cannot load badges: %s", err.Error())
-	}
-	fmt.Println("Badges:")
-	for key, value := range badges {
-		fmt.Printf("%s: %d\n", key, value)
-	}
+	if *EnableWeb {
+		badges, err := client.WebClient.GetBadges()
+		if err != nil {
+			Warn("Cannot load badges: %s", err.Error())
+		} else {
+			fmt.Println("Badges:")
+			for key, value := range badges {
+				fmt.Printf("%s: %d\n", key, value)
+			}
+		}
 
-	events, err := client.WebClient.GetUpcomingEvents()
-	if err != nil {
-		Warn("Cannot load upcoming events: %s", err.Error())
-	}
-	fmt.Println("Events:")
-	for _, e := range events.Events {
-		fmt.Printf("%s on %s\n", e.Title, e.When)
+		events, err := client.WebClient.GetUpcomingEvents(14)
+		if err != nil {
+			Warn("Cannot load upcoming events: %s", err.Error())
+		} else {
+			fmt.Printf("Events (%d):\n", len(events.Events))
+			for _, e := range events.Events {
+				fmt.Printf("%s on %s\n", e.Title, e.When)
+			}
+		}
 	}
 
 	// email
-	mailboxes, err := client.EmailClient.ListMailboxes()
-	if err != nil {
-		Warn("Cannot load email mailboxes: %s", err.Error())
-	}
-	for _, m := range mailboxes {
-		fmt.Printf(" * %s\n", m.Name)
-	}
+	if *EnableEmail {
+		mailboxes, err := client.EmailClient.ListMailboxes()
+		if err != nil {
+			Warn("Cannot load email mailboxes: %s", err.Error())
+		}
+		for _, m := range mailboxes {
+			fmt.Printf(" * %s\n", m.Name)
+		}
 
-	messages, err := client.EmailClient.ReadMailbox("INBOX", 10)
-	if err != nil {
-		Warn("Cannot read messages: %s", err.Error())
-	}
-	for _, m := range messages {
-		fmt.Printf(" = '%s' from %s\n", m.Envelope.Subject, m.Envelope.Sender[0].Address())
+		messages, err := client.EmailClient.ReadMailbox("INBOX", 10)
+		if err != nil {
+			Warn("Cannot read messages: %s", err.Error())
+		}
+		for _, m := range messages {
+			fmt.Printf(" = '%s' from %s\n", m.Envelope.Subject, m.Envelope.Sender[0].Address())
+		}
 	}
 
 	// files
-	files, err := client.FilesClient.ReadDir("/Groups")
-	if err != nil {
-		Warn("Cannot read groups: %s", err.Error())
-	}
-	for _, f := range files {
-		fmt.Println(f.Name())
+	if *EnableFiles {
+		files, err := client.FilesClient.ReadDir("/Groups")
+		if err != nil {
+			Warn("Cannot read groups: %s", err.Error())
+		}
+		for _, f := range files {
+			fmt.Println(f.Name())
+		}
 	}
 }

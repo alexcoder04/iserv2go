@@ -2,6 +2,7 @@ package web
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/alexcoder04/iserv2go/iserv/types"
 )
@@ -28,8 +29,8 @@ func (c *IServWebClient) GetNotifications() (*types.NotificationInfo, error) {
 	return notInfo, err
 }
 
-func (c *IServWebClient) GetUpcomingEvents() (*types.EventsInfo, error) {
-	data, err := c.doGetRequest("/calendar/api/upcoming")
+func (c *IServWebClient) GetUpcomingEvents(limit uint) (*types.EventsInfo, error) {
+	data, err := c.doGetRequest(fmt.Sprintf("/calendar/api/upcoming?limit=%d&includeSubscriptions=true", limit))
 	if err != nil {
 		return &types.EventsInfo{}, err
 	}

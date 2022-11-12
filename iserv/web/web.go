@@ -46,10 +46,32 @@ func (c *IServWebClient) Login(config *types.IServAccountConfig, agentString str
 	form := &url.Values{}
 	form.Add("_username", c.Config.Username)
 	form.Add("_password", c.Config.Password)
-	form.Add("_remember_me", "on")
 
 	// login request
 	req, err := http.NewRequest("POST", c.IServUrl+"/auth/login", strings.NewReader(form.Encode()))
+	if err != nil {
+		return err
+	}
+	req.Header.Add("User-Agent", c.AgentString)
+	req.Header.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	res, err := c.HttpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+
+	_, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *IServWebClient) Logout() error {
+	req, err := http.NewRequest("POST", c.IServUrl+"/auth/logout", strings.NewReader(""))
 	if err != nil {
 		return err
 	}

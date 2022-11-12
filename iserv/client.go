@@ -59,5 +59,12 @@ func (c *IServClient) Logout() error {
 		}
 	}
 
+	if c.ClientOptions.EnableWeb {
+		err := c.WebClient.Logout()
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
