@@ -50,6 +50,15 @@ func main() {
 		fmt.Printf("%s: %d\n", key, value)
 	}
 
+	events, err := client.WebClient.GetUpcomingEvents()
+	if err != nil {
+		Warn("Cannot load upcoming events: %s", err.Error())
+	}
+	fmt.Println("Events:")
+	for _, e := range events.Events {
+		fmt.Printf("%s on %s\n", e.Title, e.When)
+	}
+
 	// email
 	mailboxes, err := client.EmailClient.ListMailboxes()
 	if err != nil {
