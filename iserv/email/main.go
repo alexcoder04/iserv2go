@@ -8,28 +8,23 @@ import (
 )
 
 type IServEmailClient struct {
-	Config     *types.IServAccountConfig
-	ImapClient *client.Client
+	config     *types.IServAccountConfig
+	imapClient *client.Client
 }
 
 func (c *IServEmailClient) Login(config *types.IServAccountConfig) error {
-	c.Config = config
+	c.config = config
 
-	conn, err := client.DialTLS(fmt.Sprintf("%s:993", c.Config.IServHost), nil)
+	conn, err := client.DialTLS(fmt.Sprintf("%s:993", c.config.IServHost), nil)
 	if err != nil {
 		fmt.Println("error dial tls")
 		return err
 	}
-	c.ImapClient = conn
+	c.imapClient = conn
 
-	err = c.ImapClient.Login(c.Config.Username, c.Config.Password)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return c.imapClient.Login(c.config.Username, c.config.Password)
 }
 
 func (c *IServEmailClient) Logout() error {
-	return c.ImapClient.Logout()
+	return c.imapClient.Logout()
 }

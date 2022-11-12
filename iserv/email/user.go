@@ -6,7 +6,7 @@ func (c *IServEmailClient) ListMailboxes() ([]imap.MailboxInfo, error) {
 	mailboxes := make(chan *imap.MailboxInfo, 10)
 	done := make(chan error, 1)
 	go func() {
-		done <- c.ImapClient.List("", "*", mailboxes)
+		done <- c.imapClient.List("", "*", mailboxes)
 	}()
 
 	res := []imap.MailboxInfo{}
@@ -22,7 +22,7 @@ func (c *IServEmailClient) ListMailboxes() ([]imap.MailboxInfo, error) {
 }
 
 func (c *IServEmailClient) ReadMailbox(name string, limit uint32) ([]imap.Message, error) {
-	mbox, err := c.ImapClient.Select(name, false)
+	mbox, err := c.imapClient.Select(name, false)
 	if err != nil {
 		return []imap.Message{}, err
 	}
@@ -38,7 +38,7 @@ func (c *IServEmailClient) ReadMailbox(name string, limit uint32) ([]imap.Messag
 	messages := make(chan *imap.Message, 10)
 	done := make(chan error, 1)
 	go func() {
-		done <- c.ImapClient.Fetch(seqset, []imap.FetchItem{imap.FetchEnvelope}, messages)
+		done <- c.imapClient.Fetch(seqset, []imap.FetchItem{imap.FetchEnvelope}, messages)
 	}()
 
 	res := []imap.Message{}

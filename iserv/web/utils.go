@@ -3,7 +3,7 @@ package web
 import "io/ioutil"
 
 func (c *IServWebClient) doGetRequest(url string) ([]byte, error) {
-	res, err := c.HttpClient.Get(c.IServUrl + url)
+	res, err := c.httpClient.Get(c.iServUrl + url)
 	if err != nil {
 		return []byte{}, err
 	}

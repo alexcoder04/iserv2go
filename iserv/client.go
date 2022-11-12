@@ -11,9 +11,9 @@ type IServClient struct {
 	Config        *types.IServAccountConfig
 	ClientOptions *types.IServClientOptions
 
-	EmailClient *email.IServEmailClient
-	FilesClient *files.IServFilesClient
-	WebClient   *web.IServWebClient
+	Email *email.IServEmailClient
+	Files *files.IServFilesClient
+	Web   *web.IServWebClient
 }
 
 func (c *IServClient) Login(ac *types.IServAccountConfig, cc *types.IServClientOptions) error {
@@ -21,50 +21,57 @@ func (c *IServClient) Login(ac *types.IServAccountConfig, cc *types.IServClientO
 	c.ClientOptions = cc
 
 	// login modules
+	for key, val := range c.ClientOptions.EnableModules {
+		if key == "web" && val {
+			c.Web = &web.IServWebClient{}
+			err := c.Web.Login(c.Config, c.ClientOptions.AgentString)
+			if err != nil {
+				return err
+			}
+		}
 
-	if c.ClientOptions.EnableWeb {
-		c.WebClient = &web.IServWebClient{}
-		err := c.WebClient.Login(c.Config, c.ClientOptions.AgentString)
-		if err != nil {
-			return err
+		if key == "files" && val {
+			c.Files = &files.IServFilesClient{}
+			err := c.Files.Login(c.Config)
+			if err != nil {
+				return err
+			}
+		}
+
+		if key == "email" && val {
+			c.Email = &email.IServEmailClient{}
+			err := c.Email.Login(c.Config)
+			if err != nil {
+				return err
+			}
 		}
 	}
-
-	if c.ClientOptions.EnableEmail {
-		c.EmailClient = &email.IServEmailClient{}
-		err := c.EmailClient.Login(c.Config)
-		if err != nil {
-			return err
-		}
-	}
-
-	if c.ClientOptions.EnableFiles {
-		c.FilesClient = &files.IServFilesClient{}
-		err := c.FilesClient.Login(c.Config)
-		if err != nil {
-			return err
-		}
-	}
-
 	return nil
 }
 
 func (c *IServClient) Logout() error {
 	// logout modules
+	for key, val := range c.ClientOptions.EnableModules {
+		if key == "web" && val {
+			err := c.Web.Logout()
+			if err != nil {
+				return err
+			}
+		}
 
-	if c.ClientOptions.EnableEmail {
-		err := c.EmailClient.Logout()
-		if err != nil {
-			return err
+		if key == "files" && val {
+			err := c.Files.Logout()
+			if err != nil {
+				return err
+			}
+		}
+
+		if key == "email" && val {
+			err := c.Email.Logout()
+			if err != nil {
+				return err
+			}
 		}
 	}
-
-	if c.ClientOptions.EnableWeb {
-		err := c.WebClient.Logout()
-		if err != nil {
-			return err
-		}
-	}
-
 	return nil
 }

@@ -39,9 +39,11 @@ func main() {
 		Password:  os.Getenv("ISERV_PASSWORD"),
 		Username:  os.Getenv("ISERV_USERNAME"),
 	}, &types.IServClientOptions{
-		EnableEmail: *EnableEmail,
-		EnableFiles: *EnableFiles,
-		EnableWeb:   *EnableWeb,
+		EnableModules: map[string]bool{
+			"email": *EnableEmail,
+			"files": *EnableFiles,
+			"web":   *EnableWeb,
+		},
 	})
 	if err != nil {
 		Die("Cannot login: %s", err.Error())
@@ -50,7 +52,7 @@ func main() {
 
 	// web
 	if *EnableWeb {
-		badges, err := client.WebClient.GetBadges()
+		badges, err := client.Web.GetBadges()
 		if err != nil {
 			Warn("Cannot load badges: %s", err.Error())
 		} else {
@@ -60,7 +62,7 @@ func main() {
 			}
 		}
 
-		events, err := client.WebClient.GetUpcomingEvents(14)
+		events, err := client.Web.GetUpcomingEvents(14)
 		if err != nil {
 			Warn("Cannot load upcoming events: %s", err.Error())
 		} else {
@@ -73,7 +75,7 @@ func main() {
 
 	// email
 	if *EnableEmail {
-		mailboxes, err := client.EmailClient.ListMailboxes()
+		mailboxes, err := client.Email.ListMailboxes()
 		if err != nil {
 			Warn("Cannot load email mailboxes: %s", err.Error())
 		}
@@ -81,7 +83,7 @@ func main() {
 			fmt.Printf(" * %s\n", m.Name)
 		}
 
-		messages, err := client.EmailClient.ReadMailbox("INBOX", 10)
+		messages, err := client.Email.ReadMailbox("INBOX", 10)
 		if err != nil {
 			Warn("Cannot read messages: %s", err.Error())
 		}
@@ -92,7 +94,7 @@ func main() {
 
 	// files
 	if *EnableFiles {
-		files, err := client.FilesClient.ReadDir("/Groups")
+		files, err := client.Files.ReadDir("/Groups")
 		if err != nil {
 			Warn("Cannot read groups: %s", err.Error())
 		}

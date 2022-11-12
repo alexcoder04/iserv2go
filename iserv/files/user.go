@@ -6,11 +6,11 @@ import (
 )
 
 func (c *IServFilesClient) ReadDir(path string) ([]os.FileInfo, error) {
-	return c.DavClient.ReadDir(path)
+	return c.davClient.ReadDir(path)
 }
 
 func (c *IServFilesClient) ReadFile(path string) ([]byte, error) {
-	return c.DavClient.Read(path)
+	return c.davClient.Read(path)
 }
 
 func (c *IServFilesClient) DownloadFile(webdavpath string, localpath string) error {
@@ -23,7 +23,7 @@ func (c *IServFilesClient) DownloadFile(webdavpath string, localpath string) err
 }
 
 func (c *IServFilesClient) WriteFile(path string, content []byte) error {
-	return c.DavClient.Write(path, content, 0600)
+	return c.davClient.Write(path, content, 0600)
 }
 
 func (c *IServFilesClient) UploadFile(localpath string, webdavpath string) error {
