@@ -42,9 +42,9 @@ func main(){
 		Password:  os.Getenv("ISERV_PASSWORD"),
 	}, &types.IServClientOptions{
 		EnableModules: map[string]bool{
-			"email": *EnableEmail,
-			"files": *EnableFiles,
-			"web":   *EnableWeb,
+			"email": true,
+			"files": false,
+			"web":   false,
 		},
 	})
     if err != nil {
