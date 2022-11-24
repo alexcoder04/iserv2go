@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/alexcoder04/iserv2go/iserv/iutils"
 	"github.com/alexcoder04/iserv2go/iserv/types"
 )
 
@@ -28,7 +29,7 @@ func buildMailBody(mail types.EMail) []byte {
 		strings.Join([]string{
 			"MIME-version: 1.0",
 			"Content-Type: text/plain; charset=utf-8",
-			"From: " + mail.From,
+			"From: " + iutils.GetNameFromAddress(mail.From) + "<" + mail.From + ">",
 			getToString(mail.To, mail.ToDispName, mail.CCs),
 			"Subject: " + mail.Subject,
 			"\r\n",

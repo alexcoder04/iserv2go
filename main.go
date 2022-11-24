@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/alexcoder04/iserv2go/iserv"
+	"github.com/alexcoder04/iserv2go/iserv/iutils"
 	"github.com/alexcoder04/iserv2go/iserv/types"
 	"github.com/joho/godotenv"
 )
@@ -96,7 +97,7 @@ func main() {
 			Subject:    "Hello World",
 			From:       myMail,
 			To:         myMail,
-			ToDispName: "ME",
+			ToDispName: iutils.GetNameFromAddress(myMail),
 			CCs:        []string{},
 			Body:       "Hello World, it's me via iserv2go!",
 		}
