@@ -1,6 +1,12 @@
 package email
 
-import "github.com/emersion/go-imap"
+import (
+	"fmt"
+	"net/smtp"
+
+	"github.com/alexcoder04/iserv2go/iserv/types"
+	"github.com/emersion/go-imap"
+)
 
 func (c *IServEmailClient) ListMailboxes() ([]imap.MailboxInfo, error) {
 	mailboxes := make(chan *imap.MailboxInfo, 10)
@@ -51,4 +57,14 @@ func (c *IServEmailClient) ReadMailbox(name string, limit uint32) ([]imap.Messag
 	}
 
 	return res, nil
+}
+
+func (c *IServEmailClient) SendMail(mail types.EMail) error {
+	return smtp.SendMail(
+		fmt.Sprintf("%s:587", c.config.IServHost),
+		c.smtpAuth,
+		mail.From,
+		append(mail.CCs, mail.To),
+		buildMailBody(mail),
+	)
 }

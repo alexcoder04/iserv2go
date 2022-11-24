@@ -90,6 +90,21 @@ func main() {
 		for _, m := range messages {
 			fmt.Printf(" = '%s' from %s\n", m.Envelope.Subject, m.Envelope.Sender[0].Address())
 		}
+
+		myMail := fmt.Sprintf("%s@%s", os.Getenv("ISERV_USERNAME"), os.Getenv("ISERV_HOST"))
+		m := types.EMail{
+			Subject:    "Hello World",
+			From:       myMail,
+			To:         myMail,
+			ToDispName: "ME",
+			CCs:        []string{},
+			Body:       "Hello World, it's me via iserv2go!",
+		}
+		err = client.Email.SendMail(m)
+		if err != nil {
+			Warn("Cannot send mail: %s", err.Error())
+		}
+		fmt.Println("Sent test message to myself!")
 	}
 
 	// files
