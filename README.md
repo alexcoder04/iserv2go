@@ -1,6 +1,14 @@
 
 # iserv2go
 
+[![License](https://img.shields.io/github/license/alexcoder04/iserv2go)](https://github.com/alexcoder04/iserv2go/blob/main/LICENSE)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/alexcoder04/iserv2go)](https://github.com/alexcoder04/iserv2go/blob/main/go.mod)
+[![Lines](https://img.shields.io/tokei/lines/github/alexcoder04/iserv2go?label=lines)](https://github.com/alexcoder04/iserv2go/pulse)
+[![Release](https://img.shields.io/github/v/release/alexcoder04/iserv2go?display_name=tag&sort=semver)](https://github.com/alexcoder04/iserv2go/releases/latest)
+[![Stars](https://img.shields.io/github/stars/alexcoder04/iserv2go)](https://github.com/alexcoder04/iserv2go/stargazers)
+[![Contributors](https://img.shields.io/github/contributors-anon/alexcoder04/iserv2go)](https://github.com/alexcoder04/iserv2go/graphs/contributors)
+
+
 Unofficial IServ Go library and CLI.
 
 **Disclaimer 1**: I am **not** affiliated with the [IServ GmbH](https://iserv.eu/) in any way.
