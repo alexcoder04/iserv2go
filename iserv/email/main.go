@@ -8,13 +8,13 @@ import (
 	"github.com/emersion/go-imap/client"
 )
 
-type IServEmailClient struct {
-	config     *types.IServAccountConfig
+type EmailClient struct {
+	config     *types.AccountConfig
 	imapClient *client.Client
 	smtpAuth   smtp.Auth
 }
 
-func (c *IServEmailClient) Login(config *types.IServAccountConfig) error {
+func (c *EmailClient) Login(config *types.AccountConfig) error {
 	c.config = config
 
 	// imap client
@@ -35,6 +35,6 @@ func (c *IServEmailClient) Login(config *types.IServAccountConfig) error {
 	return nil
 }
 
-func (c *IServEmailClient) Logout() error {
+func (c *EmailClient) Logout() error {
 	return c.imapClient.Logout()
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/alexcoder04/iserv2go/iserv/types"
 )
 
-func (c *IServWebClient) GetBadges() (map[string]int, error) {
+func (c *WebClient) GetBadges() (map[string]int, error) {
 	data, err := c.doGetRequest("/app/navigation/badges")
 	if err != nil {
 		return map[string]int{}, err
@@ -18,7 +18,7 @@ func (c *IServWebClient) GetBadges() (map[string]int, error) {
 	return resData, err
 }
 
-func (c *IServWebClient) GetNotifications() (*types.NotificationInfo, error) {
+func (c *WebClient) GetNotifications() (*types.NotificationInfo, error) {
 	data, err := c.doGetRequest("/user/api/notifications")
 	if err != nil {
 		return &types.NotificationInfo{}, err
@@ -29,7 +29,7 @@ func (c *IServWebClient) GetNotifications() (*types.NotificationInfo, error) {
 	return notInfo, err
 }
 
-func (c *IServWebClient) GetUpcomingEvents(limit uint) (*types.EventsInfo, error) {
+func (c *WebClient) GetUpcomingEvents(limit uint) (*types.EventsInfo, error) {
 	data, err := c.doGetRequest(fmt.Sprintf("/calendar/api/upcoming?limit=%d&includeSubscriptions=true", limit))
 	if err != nil {
 		return &types.EventsInfo{}, err
@@ -40,10 +40,10 @@ func (c *IServWebClient) GetUpcomingEvents(limit uint) (*types.EventsInfo, error
 	return eventsInfo, err
 }
 
-func (c *IServWebClient) GetCurrentExercises() ([]types.IServExercise, error) {
+func (c *WebClient) GetCurrentExercises() ([]types.Exercise, error) {
 	return c.getExercisesFrom("")
 }
 
-func (c *IServWebClient) GetPastExercises() ([]types.IServExercise, error) {
+func (c *WebClient) GetPastExercises() ([]types.Exercise, error) {
 	return c.getExercisesFrom("/past/exercise")
 }

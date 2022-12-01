@@ -41,14 +41,14 @@ import (
 
 func main(){
     // create new client instance
-    client := iserv.IServClient{}
+    client := iserv.Client{}
 
     // login your client
-    err := client.Login(&types.IServAccountConfig{
+    err := client.Login(&types.AccountConfig{
 		IServHost: os.Getenv("ISERV_HOST"),
 		Username:  os.Getenv("ISERV_USERNAME"),
 		Password:  os.Getenv("ISERV_PASSWORD"),
-	}, &types.IServClientOptions{
+	}, &types.ClientOptions{
 		EnableModules: map[string]bool{
 			"email": true,
 			"files": false,

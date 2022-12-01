@@ -12,14 +12,14 @@ import (
 	"golang.org/x/net/publicsuffix"
 )
 
-type IServWebClient struct {
-	config      *types.IServAccountConfig
+type WebClient struct {
+	config      *types.AccountConfig
 	agentString string
 	iServUrl    string
 	httpClient  *http.Client
 }
 
-func (c *IServWebClient) Login(config *types.IServAccountConfig, agentString string) error {
+func (c *WebClient) Login(config *types.AccountConfig, agentString string) error {
 	c.config = config
 	c.agentString = agentString
 
@@ -53,7 +53,6 @@ func (c *IServWebClient) Login(config *types.IServAccountConfig, agentString str
 		return err
 	}
 	req.Header.Add("User-Agent", c.agentString)
-	req.Header.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	res, err := c.httpClient.Do(req)
@@ -70,13 +69,12 @@ func (c *IServWebClient) Login(config *types.IServAccountConfig, agentString str
 	return nil
 }
 
-func (c *IServWebClient) Logout() error {
+func (c *WebClient) Logout() error {
 	req, err := http.NewRequest("POST", c.iServUrl+"/auth/logout", strings.NewReader(""))
 	if err != nil {
 		return err
 	}
 	req.Header.Add("User-Agent", c.agentString)
-	req.Header.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	res, err := c.httpClient.Do(req)

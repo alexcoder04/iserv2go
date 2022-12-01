@@ -1,13 +1,13 @@
 package types
 
 // config
-type IServAccountConfig struct {
+type AccountConfig struct {
 	IServHost string
 	Username  string
 	Password  string
 }
 
-type IServClientOptions struct {
+type ClientOptions struct {
 	EnableModules map[string]bool
 	AgentString   string
 }

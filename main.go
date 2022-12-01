@@ -33,13 +33,13 @@ func Warn(message string, args ...any) {
 }
 
 func main() {
-	client := iserv.IServClient{}
+	client := iserv.Client{}
 
-	err := client.Login(&types.IServAccountConfig{
+	err := client.Login(&types.AccountConfig{
 		IServHost: os.Getenv("ISERV_HOST"),
 		Password:  os.Getenv("ISERV_PASSWORD"),
 		Username:  os.Getenv("ISERV_USERNAME"),
-	}, &types.IServClientOptions{
+	}, &types.ClientOptions{
 		EnableModules: map[string]bool{
 			"email": *EnableEmail,
 			"files": *EnableFiles,

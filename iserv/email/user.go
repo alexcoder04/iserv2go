@@ -8,7 +8,7 @@ import (
 	"github.com/emersion/go-imap"
 )
 
-func (c *IServEmailClient) ListMailboxes() ([]imap.MailboxInfo, error) {
+func (c *EmailClient) ListMailboxes() ([]imap.MailboxInfo, error) {
 	mailboxes := make(chan *imap.MailboxInfo, 10)
 	done := make(chan error, 1)
 	go func() {
@@ -27,7 +27,7 @@ func (c *IServEmailClient) ListMailboxes() ([]imap.MailboxInfo, error) {
 	return res, nil
 }
 
-func (c *IServEmailClient) ReadMailbox(name string, limit uint32) ([]imap.Message, error) {
+func (c *EmailClient) ReadMailbox(name string, limit uint32) ([]imap.Message, error) {
 	mbox, err := c.imapClient.Select(name, false)
 	if err != nil {
 		return []imap.Message{}, err
@@ -59,7 +59,7 @@ func (c *IServEmailClient) ReadMailbox(name string, limit uint32) ([]imap.Messag
 	return res, nil
 }
 
-func (c *IServEmailClient) SendMail(mail types.EMail) error {
+func (c *EmailClient) SendMail(mail types.EMail) error {
 	return smtp.SendMail(
 		fmt.Sprintf("%s:587", c.config.IServHost),
 		c.smtpAuth,

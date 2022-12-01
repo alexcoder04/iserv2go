@@ -3,7 +3,7 @@ package types
 import "time"
 
 // exercise
-type IServExercise struct {
+type Exercise struct {
 	Types       []string
 	Title       string
 	DueDate     time.Time

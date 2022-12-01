@@ -9,13 +9,13 @@ import (
 	"github.com/alexcoder04/iserv2go/iserv/types"
 )
 
-func (c *IServWebClient) getExerciseInfo(url string) (types.IServExercise, error) {
+func (c *WebClient) getExerciseInfo(url string) (types.Exercise, error) {
 	doc, err := c.doGetRequestQueryDoc(url)
 	if err != nil {
-		return types.IServExercise{}, err
+		return types.Exercise{}, err
 	}
 
-	exercise := types.IServExercise{}
+	exercise := types.Exercise{}
 
 	// title
 	exercise.Title = doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div.panel-heading > h3").Text()
@@ -52,11 +52,11 @@ func (c *IServWebClient) getExerciseInfo(url string) (types.IServExercise, error
 	return exercise, nil
 }
 
-func (c *IServWebClient) getExercisesFrom(path string) ([]types.IServExercise, error) {
+func (c *WebClient) getExercisesFrom(path string) ([]types.Exercise, error) {
 	// get html page of exercise overview
 	doc, err := c.doGetRequestQueryDoc("/exercise" + path)
 	if err != nil {
-		return []types.IServExercise{}, err
+		return []types.Exercise{}, err
 	}
 
 	// for each task get the url
@@ -69,7 +69,7 @@ func (c *IServWebClient) getExercisesFrom(path string) ([]types.IServExercise, e
 	})
 
 	// get info for all exercises concurrently
-	exercises := []types.IServExercise{}
+	exercises := []types.Exercise{}
 
 	var wg sync.WaitGroup
 	var mu sync.Mutex

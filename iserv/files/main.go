@@ -7,18 +7,18 @@ import (
 	"github.com/studio-b12/gowebdav"
 )
 
-type IServFilesClient struct {
-	config    *types.IServAccountConfig
+type FilesClient struct {
+	config    *types.AccountConfig
 	davClient *gowebdav.Client
 }
 
-func (c *IServFilesClient) Login(config *types.IServAccountConfig) error {
+func (c *FilesClient) Login(config *types.AccountConfig) error {
 	c.config = config
 
 	c.davClient = gowebdav.NewClient(fmt.Sprintf("https://webdav.%s", c.config.IServHost), c.config.Username, c.config.Password)
 	return c.davClient.Connect()
 }
 
-func (c *IServFilesClient) Logout() error {
+func (c *FilesClient) Logout() error {
 	return nil
 }

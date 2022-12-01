@@ -7,23 +7,23 @@ import (
 	"github.com/alexcoder04/iserv2go/iserv/web"
 )
 
-type IServClient struct {
-	Config        *types.IServAccountConfig
-	ClientOptions *types.IServClientOptions
+type Client struct {
+	Config        *types.AccountConfig
+	ClientOptions *types.ClientOptions
 
-	Email *email.IServEmailClient
-	Files *files.IServFilesClient
-	Web   *web.IServWebClient
+	Email *email.EmailClient
+	Files *files.FilesClient
+	Web   *web.WebClient
 }
 
-func (c *IServClient) Login(ac *types.IServAccountConfig, cc *types.IServClientOptions) error {
+func (c *Client) Login(ac *types.AccountConfig, cc *types.ClientOptions) error {
 	c.Config = ac
 	c.ClientOptions = cc
 
 	// login modules
 	for key, val := range c.ClientOptions.EnableModules {
 		if key == "web" && val {
-			c.Web = &web.IServWebClient{}
+			c.Web = &web.WebClient{}
 			err := c.Web.Login(c.Config, c.ClientOptions.AgentString)
 			if err != nil {
 				return err
@@ -31,7 +31,7 @@ func (c *IServClient) Login(ac *types.IServAccountConfig, cc *types.IServClientO
 		}
 
 		if key == "files" && val {
-			c.Files = &files.IServFilesClient{}
+			c.Files = &files.FilesClient{}
 			err := c.Files.Login(c.Config)
 			if err != nil {
 				return err
@@ -39,7 +39,7 @@ func (c *IServClient) Login(ac *types.IServAccountConfig, cc *types.IServClientO
 		}
 
 		if key == "email" && val {
-			c.Email = &email.IServEmailClient{}
+			c.Email = &email.EmailClient{}
 			err := c.Email.Login(c.Config)
 			if err != nil {
 				return err
@@ -49,7 +49,7 @@ func (c *IServClient) Login(ac *types.IServAccountConfig, cc *types.IServClientO
 	return nil
 }
 
-func (c *IServClient) Logout() error {
+func (c *Client) Logout() error {
 	// logout modules
 	for key, val := range c.ClientOptions.EnableModules {
 		if key == "web" && val {
