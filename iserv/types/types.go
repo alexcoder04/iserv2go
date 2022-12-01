@@ -16,9 +16,12 @@ type IServClientOptions struct {
 
 // other
 type IServExercise struct {
-	Type    string
-	Title   string
-	DueDate time.Time
-	Tags    []string
-	Teacher string
+	Types       []string
+	Title       string
+	DueDate     time.Time
+	StartDate   time.Time
+	Description string
+	Files       []string
+	Tags        []string
+	Teacher     string
 }

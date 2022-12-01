@@ -1,6 +1,8 @@
 package web
 
 import (
+	"time"
+
 	"github.com/PuerkitoBio/goquery"
 	"github.com/alexcoder04/iserv2go/iserv/types"
 )
@@ -27,5 +29,78 @@ func (c *IServWebClient) GetExercises() ([]types.IServExercise, error) {
 		}
 	})
 
+	_, _ = c.ParseExercise(urls[0])
+
 	return []types.IServExercise{}, nil
+}
+
+func (c *IServWebClient) ParseExercise(url string) (types.IServExercise, error) {
+	// get html page of specific exercise
+	res, err := c.httpClient.Get(url)
+	if err != nil {
+		return types.IServExercise{}, err
+	}
+	defer res.Body.Close()
+
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	if err != nil {
+		return types.IServExercise{}, err
+	}
+
+	// parse html page
+	exercise := types.IServExercise{} // create struct
+	// get title
+	title := doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div.panel-heading > h3").Text()
+	exercise.Title = title
+
+	// get all types of submitting an answer
+	var types []string
+	if doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(3) > div > div.panel-body > div.row.pb-3 > form > div > h5").Text() == "Text" {
+		types = append(types, "Text")
+	}
+
+	if doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(3) > div > div.panel-body > div.form-group.p-3.m-0.confirmation-flow.confirmation-warning > label").Text() == "Erledigt" {
+		types = append(types, "Mark")
+	}
+
+	exercise.Types = types
+
+	// get dates
+	duedate := doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(2) > div > table > tbody > tr > td:nth-child(3) > ul > li:nth-child(1)").Text()
+	startdate := doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(2) > div > table > tbody > tr > td:nth-child(2)").Text()
+	exercise.DueDate, _ = time.Parse("02.01.2006 15:04", duedate)
+	exercise.StartDate, _ = time.Parse("02.01.2006 15:04", startdate)
+
+	// get description
+	description := doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(2) > div > div").Text()
+	exercise.Description = description
+
+	// get teacher
+	teacher := doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(2) > div > table > tbody > tr > td.bt0.pt-0.pl-0 > a").Text()
+	exercise.Teacher = teacher
+
+	// files
+	var fileurls []string
+	doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(3) > div > form > table > tbody > tr").Each(func(i int, s *goquery.Selection) {
+		fileurl, _ := s.Children().Eq(1).Children().First().Attr("href")
+		fileurls = append(fileurls, "https://iserv-schillerschule.de/"+fileurl)
+	})
+	exercise.Files = fileurls
+
+	// print out
+	// fmt.Println(title)
+	// fmt.Println(duedate)
+	// fmt.Println(startdate)
+	// fmt.Println(teacher)
+	// fmt.Println("Fileurls:")
+	// for _, fileurl := range fileurls {
+	// 	fmt.Println(fileurl)
+	// }
+	// fmt.Println("Types:")
+	// for _, submittype := range types {
+	// 	fmt.Println(submittype)
+	// }
+	// fmt.Println(description)
+
+	return exercise, nil
 }
