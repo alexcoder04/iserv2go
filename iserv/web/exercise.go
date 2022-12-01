@@ -1,6 +1,7 @@
 package web
 
 import (
+	"strings"
 	"sync"
 	"time"
 
@@ -9,57 +10,44 @@ import (
 )
 
 func (c *IServWebClient) getExerciseInfo(url string) (types.IServExercise, error) {
-	// get html page of specific exercise
-	res, err := c.httpClient.Get(url)
-	if err != nil {
-		return types.IServExercise{}, err
-	}
-	defer res.Body.Close()
-
-	doc, err := goquery.NewDocumentFromReader(res.Body)
+	doc, err := c.doGetRequestQueryDoc(url)
 	if err != nil {
 		return types.IServExercise{}, err
 	}
 
-	// parse html page
-	exercise := types.IServExercise{} // create struct
-	// get title
-	title := doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div.panel-heading > h3").Text()
-	exercise.Title = title
+	exercise := types.IServExercise{}
 
-	// get all types of submitting an answer
-	var types []string
+	// title
+	exercise.Title = doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div.panel-heading > h3").Text()
+
+	// all types of submitting an answer
+	exercise.Types = []string{}
 	if doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(3) > div > div.panel-body > div.row.pb-3 > form > div > h5").Text() == "Text" {
-		types = append(types, "Text")
+		exercise.Types = append(exercise.Types, "Text")
 	}
 
 	if doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(3) > div > div.panel-body > div.form-group.p-3.m-0.confirmation-flow.confirmation-warning > label").Text() == "Erledigt" {
-		types = append(types, "Mark")
+		exercise.Types = append(exercise.Types, "Mark")
 	}
 
-	exercise.Types = types
-
-	// get dates
+	// dates
 	duedate := doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(2) > div > table > tbody > tr > td:nth-child(3) > ul > li:nth-child(1)").Text()
 	startdate := doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(2) > div > table > tbody > tr > td:nth-child(2)").Text()
 	exercise.DueDate, _ = time.Parse("02.01.2006 15:04", duedate)
 	exercise.StartDate, _ = time.Parse("02.01.2006 15:04", startdate)
 
-	// get description
-	description := doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(2) > div > div").Text()
-	exercise.Description = description
+	// description
+	exercise.Description = doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(2) > div > div").Text()
 
 	// get teacher
-	teacher := doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(2) > div > table > tbody > tr > td.bt0.pt-0.pl-0 > a").Text()
-	exercise.Teacher = teacher
+	exercise.Teacher = doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(2) > div > table > tbody > tr > td.bt0.pt-0.pl-0 > a").Text()
 
 	// files
-	var fileurls []string
+	exercise.Files = []string{}
 	doc.Find("#content > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child(3) > div > form > table > tbody > tr").Each(func(i int, s *goquery.Selection) {
 		fileurl, _ := s.Children().Eq(1).Children().First().Attr("href")
-		fileurls = append(fileurls, "https://iserv-schillerschule.de/"+fileurl)
+		exercise.Files = append(exercise.Files, "https://iserv-schillerschule.de/"+fileurl)
 	})
-	exercise.Files = fileurls
 
 	return exercise, nil
 }
@@ -76,7 +64,7 @@ func (c *IServWebClient) getExercisesFrom(path string) ([]types.IServExercise, e
 	doc.Find("#crud-table tbody tr").Each(func(i int, s *goquery.Selection) {
 		if !s.HasClass("info") {
 			url, _ := s.Children().Eq(1).Children().First().Attr("href")
-			urls = append(urls, url)
+			urls = append(urls, strings.TrimLeft(url, c.iServUrl))
 		}
 	})
 
