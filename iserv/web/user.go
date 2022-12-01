@@ -40,21 +40,10 @@ func (c *IServWebClient) GetUpcomingEvents(limit uint) (*types.EventsInfo, error
 	return eventsInfo, err
 }
 
-//func (c *IServWebClient) GetExercises() ([]IServExercise, error) {
-//	res, err := c.HttpClient.Get(c.Config.IServURL + "app/navigation/badges")
-//	if err != nil {
-//		return []IServExercise{}, err
-//	}
-//	defer res.Body.Close()
-//
-//	doc, err := goquery.NewDocumentFromReader(res.Body)
-//	if err != nil {
-//		return []IServExercise{}, err
-//	}
-//	tasksTable := doc.Find("#crud-table")
-//	fmt.Println(tasksTable)
-//	for _, tr := range tasksTable.Filter("tr").Nodes {
-//		fmt.Println(tr)
-//	}
-//	return []IServExercise{}, nil
-//}
+func (c *IServWebClient) GetCurrentExercises() ([]types.IServExercise, error) {
+	return c.getExercisesFrom("")
+}
+
+func (c *IServWebClient) GetPastExercises() ([]types.IServExercise, error) {
+	return c.getExercisesFrom("/past/exercise")
+}

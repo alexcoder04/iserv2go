@@ -1,19 +1,19 @@
 package web
 
 import (
+	"sync"
+
 	"github.com/PuerkitoBio/goquery"
 	"github.com/alexcoder04/iserv2go/iserv/types"
 )
 
-func (c *IServWebClient) GetExercises() ([]types.IServExercise, error) {
-	// get html page of exercise overview
-	res, err := c.httpClient.Get(c.iServUrl + "/exercise")
-	if err != nil {
-		return []types.IServExercise{}, err
-	}
-	defer res.Body.Close()
+func getExerciseInfo(url string) (types.IServExercise, error) {
+	return types.IServExercise{}, nil
+}
 
-	doc, err := goquery.NewDocumentFromReader(res.Body)
+func (c *IServWebClient) getExercisesFrom(path string) ([]types.IServExercise, error) {
+	// get html page of exercise overview
+	doc, err := c.doGetRequestQueryDoc("/exercise" + path)
 	if err != nil {
 		return []types.IServExercise{}, err
 	}
@@ -27,5 +27,30 @@ func (c *IServWebClient) GetExercises() ([]types.IServExercise, error) {
 		}
 	})
 
-	return []types.IServExercise{}, nil
+	// get info for all exercises concurrently
+	exercises := []types.IServExercise{}
+
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+
+	for _, url := range urls {
+		wg.Add(1)
+
+		go func(url string, wg *sync.WaitGroup) {
+			exercise, err := getExerciseInfo(url)
+			if err != nil {
+				return
+			}
+
+			mu.Lock()
+			exercises = append(exercises, exercise)
+			mu.Unlock()
+
+			wg.Done()
+		}(url, &wg)
+	}
+
+	wg.Wait()
+
+	return exercises, nil
 }
