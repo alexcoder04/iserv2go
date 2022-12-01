@@ -78,3 +78,25 @@ func main(){
 
 The `iserv` folder contains the Go Library, the subfolders `email`, `files`, `web` are modules, which can be (de-)activated separately.
 They contain each `user.go` files, which include all the functions meant to be used by end-user.
+
+## IScript
+
+IScript is a way to use the IServ API. Currently, it is used as an argument to the CLI:
+
+```sh
+iserv2go -enable-email -e "email.read_mailboxes"
+```
+
+### Syntax
+
+```text
+group.command|argument1 argument2 ...
+```
+
+### List of commands
+
+|Command|Args|Description|
+|---|---|---|
+|`email.list_mailboxes`|none|get a list of mailboxes|
+|`email.read_mailbox`|`mailbox path`|get last 50 messages from mailbox|
+|`email.send_mail`|`recipient address`, `subject`, `body`|send email|

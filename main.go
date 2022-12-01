@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/alexcoder04/iserv2go/iserv"
-	"github.com/alexcoder04/iserv2go/iserv/iutils"
 	"github.com/alexcoder04/iserv2go/iserv/types"
 	"github.com/joho/godotenv"
 )
@@ -15,6 +14,8 @@ var (
 	EnableEmail *bool = flag.Bool("enable-email", false, "whether to enable email module")
 	EnableFiles *bool = flag.Bool("enable-files", false, "whether to enable files module")
 	EnableWeb   *bool = flag.Bool("enable-web", false, "whether to enable web module")
+
+	RunCommand *string = flag.String("e", "", "iscript line to execute")
 )
 
 func init() {
@@ -51,6 +52,11 @@ func main() {
 	}
 	defer client.Logout()
 
+	if *RunCommand != "" {
+		runLine(client, *RunCommand)
+		return
+	}
+
 	// web
 	if *EnableWeb {
 		badges, err := client.Web.GetBadges()
@@ -75,38 +81,7 @@ func main() {
 	}
 
 	// email
-	if *EnableEmail {
-		mailboxes, err := client.Email.ListMailboxes()
-		if err != nil {
-			Warn("Cannot load email mailboxes: %s", err.Error())
-		}
-		for _, m := range mailboxes {
-			fmt.Printf(" * %s\n", m.Name)
-		}
-
-		messages, err := client.Email.ReadMailbox("INBOX", 10)
-		if err != nil {
-			Warn("Cannot read messages: %s", err.Error())
-		}
-		for _, m := range messages {
-			fmt.Printf(" = '%s' from %s\n", m.Envelope.Subject, m.Envelope.Sender[0].Address())
-		}
-
-		myMail := fmt.Sprintf("%s@%s", os.Getenv("ISERV_USERNAME"), os.Getenv("ISERV_HOST"))
-		m := types.EMail{
-			Subject:    "Hello World",
-			From:       myMail,
-			To:         myMail,
-			ToDispName: iutils.GetNameFromAddress(myMail),
-			CCs:        []string{},
-			Body:       "Hello World, it's me via iserv2go!",
-		}
-		err = client.Email.SendMail(m)
-		if err != nil {
-			Warn("Cannot send mail: %s", err.Error())
-		}
-		fmt.Println("Sent test message to myself!")
-	}
+	// now covered by iscript functions
 
 	// files
 	if *EnableFiles {
