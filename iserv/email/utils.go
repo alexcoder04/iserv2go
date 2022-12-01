@@ -8,7 +8,7 @@ import (
 	"github.com/alexcoder04/iserv2go/iserv/types"
 )
 
-func getToString(addr string, dispName string, ccs []string) string {
+func getToFieldString(addr string, dispName string, ccs []string) string {
 	var res string
 
 	if dispName == "" {
@@ -30,7 +30,7 @@ func buildMailBody(mail types.EMail) []byte {
 			"MIME-version: 1.0",
 			"Content-Type: text/plain; charset=utf-8",
 			"From: " + iutils.GetNameFromAddress(mail.From) + "<" + mail.From + ">",
-			getToString(mail.To, mail.ToDispName, mail.CCs),
+			getToFieldString(mail.To, mail.ToDispName, mail.CCs),
 			"Subject: " + mail.Subject,
 			"\r\n",
 			mail.Body,

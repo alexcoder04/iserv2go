@@ -1,6 +1,18 @@
 package types
 
-type Notification struct{}
+import "time"
+
+// exercise
+type IServExercise struct {
+	Type    string
+	Title   string
+	DueDate time.Time
+	Tags    []string
+	Teacher string
+}
+
+// notification
+type Notification struct{} // TODO
 
 type NotificationData struct {
 	LastEventId   int            `json:"lastEventId"`
@@ -15,6 +27,7 @@ type NotificationInfo struct {
 	Data   NotificationData `json:"data"`
 }
 
+// event
 type Event struct {
 	Id                     string     `json:"id"`
 	Uid                    string     `json:"uid"`
