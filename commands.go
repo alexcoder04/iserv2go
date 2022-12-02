@@ -5,14 +5,14 @@ import (
 	"os"
 	"strings"
 
-	"github.com/alexcoder04/iserv2go/iserv/iutils"
+	"github.com/alexcoder04/friendly/v2"
 	"github.com/alexcoder04/iserv2go/iserv/types"
 )
 
 func CommandFilesLs(s []string) {
 	data, err := Client.Files.ReadDir(s[0])
 	if err != nil {
-		Die("Cannot ls: %s", err.Error())
+		friendly.Die("Cannot ls: %s", err.Error())
 	}
 
 	for _, f := range data {
@@ -23,7 +23,7 @@ func CommandFilesLs(s []string) {
 func CommandFilesCat(s []string) {
 	data, err := Client.Files.ReadFile(s[0])
 	if err != nil {
-		Die("Cannot cat: %s", err.Error())
+		friendly.Die("Cannot cat: %s", err.Error())
 	}
 
 	fmt.Println(data)
@@ -32,21 +32,21 @@ func CommandFilesCat(s []string) {
 func CommandFilesDownload(s []string) {
 	err := Client.Files.DownloadFile(s[0], s[1])
 	if err != nil {
-		Die("Cannot download: %s", err.Error())
+		friendly.Die("Cannot download: %s", err.Error())
 	}
 }
 
 func CommandFilesUpload(s []string) {
 	err := Client.Files.UploadFile(s[0], s[1])
 	if err != nil {
-		Die("Cannot upload: %s", err.Error())
+		friendly.Die("Cannot upload: %s", err.Error())
 	}
 }
 
 func CommandWebGetBadges(s []string) {
 	badges, err := Client.Web.GetBadges()
 	if err != nil {
-		Die("Cannot load badges: %s", err.Error())
+		friendly.Die("Cannot load badges: %s", err.Error())
 	}
 
 	for key, value := range badges {
@@ -57,11 +57,11 @@ func CommandWebGetBadges(s []string) {
 func CommandWebGetNotifications(s []string) {
 	notifications, err := Client.Web.GetNotifications()
 	if err != nil {
-		Die("Cannot load notifications: %s", err.Error())
+		friendly.Die("Cannot load notifications: %s", err.Error())
 	}
 
 	if notifications.Status != "success" {
-		Die("IServ didn't return success: %s", notifications.Status)
+		friendly.Die("IServ didn't return success: %s", notifications.Status)
 	}
 
 	// TODO
@@ -73,11 +73,11 @@ func CommandWebGetNotifications(s []string) {
 func CommandWebGetUpcomingEvents(s []string) {
 	events, err := Client.Web.GetUpcomingEvents(30)
 	if err != nil {
-		Die("Cannot load events: %s", err.Error())
+		friendly.Die("Cannot load events: %s", err.Error())
 	}
 
 	if len(events.Errors) > 0 {
-		Die("IServ returned error: %s", strings.Join(events.Errors, ", "))
+		friendly.Die("IServ returned error: %s", strings.Join(events.Errors, ", "))
 	}
 
 	for _, e := range events.Events {
@@ -88,7 +88,7 @@ func CommandWebGetUpcomingEvents(s []string) {
 func CommandWebGetCurrentExercises(s []string) {
 	exercises, err := Client.Web.GetCurrentExercises()
 	if err != nil {
-		Die("Cannot load exercises: %s", err.Error())
+		friendly.Die("Cannot load exercises: %s", err.Error())
 	}
 
 	for _, e := range exercises {
@@ -99,7 +99,7 @@ func CommandWebGetCurrentExercises(s []string) {
 func CommandWebGetPastExercises(s []string) {
 	exercises, err := Client.Web.GetPastExercises()
 	if err != nil {
-		Die("Cannot load exercises: %s", err.Error())
+		friendly.Die("Cannot load exercises: %s", err.Error())
 	}
 
 	for _, e := range exercises {
@@ -110,7 +110,7 @@ func CommandWebGetPastExercises(s []string) {
 func CommandEmailListMailboxes(s []string) {
 	mailboxes, err := Client.Email.ListMailboxes()
 	if err != nil {
-		Die("Cannot load email mailboxes: %s", err.Error())
+		friendly.Die("Cannot load email mailboxes: %s", err.Error())
 	}
 
 	for _, m := range mailboxes {
@@ -128,7 +128,7 @@ func CommandEmailReadMailbox(s []string) {
 
 	messages, err := Client.Email.ReadMailbox(mb, 50)
 	if err != nil {
-		Die("Cannot read messages: %s", err.Error())
+		friendly.Die("Cannot read messages: %s", err.Error())
 	}
 
 	for _, m := range messages {
@@ -138,7 +138,7 @@ func CommandEmailReadMailbox(s []string) {
 
 func CommandEmailSendMail(s []string) {
 	if len(s) > 3 {
-		Die("Not enough arguments")
+		friendly.Die("Not enough arguments")
 	}
 
 	myMail := fmt.Sprintf("%s@%s", os.Getenv("ISERV_USERNAME"), os.Getenv("ISERV_HOST"))
@@ -146,13 +146,13 @@ func CommandEmailSendMail(s []string) {
 		Subject:    s[1],
 		From:       myMail,
 		To:         s[0],
-		ToDispName: iutils.GetNameFromAddress(s[0]),
+		ToDispName: friendly.GetFullNameFromMailAddress(s[0]),
 		CCs:        []string{},
 		Body:       s[2],
 	}
 
 	err := Client.Email.SendMail(m)
 	if err != nil {
-		Die("Error sending mail: %s", err.Error())
+		friendly.Die("Error sending mail: %s", err.Error())
 	}
 }

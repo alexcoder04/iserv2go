@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/alexcoder04/friendly/v2"
 	"github.com/alexcoder04/iserv2go/iserv"
 	"github.com/alexcoder04/iserv2go/iserv/types"
 	"github.com/joho/godotenv"
@@ -45,16 +46,6 @@ func init() {
 	Args = flag.Args()
 }
 
-// TODO include in friendly
-func Die(message string, args ...any) {
-	fmt.Printf("Fatal error: "+message+"\n", args...)
-	os.Exit(1)
-}
-
-func Warn(message string, args ...any) {
-	fmt.Printf("Warning: "+message+"\n", args...)
-}
-
 func main() {
 	if *Info {
 		fmt.Printf("iserv2go %s (commit %s)\n", VERSION, COMMIT_SHA)
@@ -75,7 +66,7 @@ func main() {
 		},
 	})
 	if err != nil {
-		Die("Cannot login: %s", err.Error())
+		friendly.Die("Cannot login: %s", err.Error())
 	}
 	defer Client.Logout()
 
@@ -83,7 +74,7 @@ func main() {
 		if _, ok := CommandsMap[Args[0]]; ok {
 			CommandsMap[Args[0]](Args[1:])
 		} else {
-			Die("Command '%s' not found", Args[0])
+			friendly.Die("Command '%s' not found", Args[0])
 		}
 	}
 }
