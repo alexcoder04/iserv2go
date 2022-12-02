@@ -41,7 +41,7 @@ build-win-i386:
 build-mac:
 	GOOS=darwin GOARCH=arm64 $(GO) build $(GOFLAGS) -o $(OUT_DIR)/$(NAME)-darwin-arm64
 
-build-all: build-amd64 build-i386 build-arm build-win-amd64 build-win-i386 build-mac
+build-all: build-amd64 build-i386 build-arm build-arm64 build-win-amd64 build-win-i386 build-mac
 
 # install
 
