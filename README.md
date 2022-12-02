@@ -9,7 +9,7 @@
 [![Contributors](https://img.shields.io/github/contributors-anon/alexcoder04/iserv2go)](https://github.com/alexcoder04/iserv2go/graphs/contributors)
 
 
-Unofficial IServ Go library and CLI.
+An unofficial Go library and CLI for [IServ](https://iserv.eu/).
 
 **Disclaimer 1**: I am **not** affiliated with the [IServ GmbH](https://iserv.eu/) in any way.
 
@@ -19,11 +19,38 @@ Unofficial IServ Go library and CLI.
 
 ## Use as CLI
 
-**Work in progress**
+```sh
+iserv2go [options] command [arguments...]
+```
 
-`main.go` rather serves as a demo right now, however, it will be turned into a proper CLI app in the future.
+## Available options
+
+|Option|Description|
+|---|---|
+|`enable-email`|enables the email functionality|
+|`enable-files`|enables the files functionality|
+|`enable-web`|enables other functions (notifications, exercises, etc)|
+
+### List of commands
+
+|Command|Arguments|Description|
+|---|---|---|
+|`email.list_mailboxes`|none|get a list of mailboxes|
+|`email.read_mailbox`|`mailbox path`|get last 50 messages from mailbox|
+|`email.send_mail`|`recipient address`, `subject`, `body`|send email|
+|`files.cat`|`filename`|print contents of file|
+|`files.download`|`iserv path`, `local path`|download file from IServ|
+|`files.ls`|`directory`|list of files in directory|
+|`files.upload`|`local path`, `iserv path`|upload file to IServ|
+|`web.get_badges`|none|get badges (for modules on the nav bar left)|
+|`web.get_current_exercises`|none|list of current exercises|
+|`web.get_notifications`|none|get unread notifications|
+|`web.get_past_exercises`|none|list of past exercises|
+|`web.get_upcoming_events`|none|list of upcoming events|
 
 ## Use as Library
+
+### Install
 
 ```sh
 go get github.com/alexcoder04/iserv2go/iserv # in your project directory
@@ -82,33 +109,7 @@ func main(){
 The `iserv` folder contains the Go Library, the subfolders `email`, `files`, `web` are modules, which can be (de-)activated separately.
 They contain each `user.go` files, which include all the functions meant to be used by end-user.
 
-## IScript
+## Contributing
 
-IScript is a way to use the IServ API. Currently, it is used as an argument to the CLI:
-
-```sh
-iserv2go -enable-email -e "email.read_mailboxes"
-```
-
-### Syntax
-
-```text
-group.command|argument1 argument2 ...
-```
-
-### List of commands
-
-|Command|Args|Description|
-|---|---|---|
-|`email.list_mailboxes`|none|get a list of mailboxes|
-|`email.read_mailbox`|`mailbox path`|get last 50 messages from mailbox|
-|`email.send_mail`|`recipient address`, `subject`, `body`|send email|
-|`files.cat`|`filename`|print contents of file|
-|`files.download`|`iserv path`, `local path`|download file from IServ|
-|`files.ls`|`directory`|list of files in directory|
-|`files.upload`|`local path`, `iserv path`|upload file to IServ|
-|`web.get_badges`|none|get badges (for modules on the nav bar left)|
-|`web.get_current_exercises`|none|list of current exercises|
-|`web.get_notifications`|none|get unread notifications|
-|`web.get_past_exercises`|none|list of past exercises|
-|`web.get_upcoming_events`|none|list of upcoming events|
+Contributions are always welcome, there are a lot of things that wait to be implemented, see the [issues](https://github.com/alexcoder04/iserv2go/issues).
+I am also looking for co-maintainers and someone to test the project extensively :)
