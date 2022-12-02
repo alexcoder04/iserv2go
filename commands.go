@@ -5,13 +5,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/alexcoder04/iserv2go/iserv"
 	"github.com/alexcoder04/iserv2go/iserv/iutils"
 	"github.com/alexcoder04/iserv2go/iserv/types"
 )
 
-func iScriptFunctionWebGetBadges(c *iserv.Client, s []string) {
-	badges, err := c.Web.GetBadges()
+func iScriptFunctionWebGetBadges(s []string) {
+	badges, err := Client.Web.GetBadges()
 	if err != nil {
 		Warn("Cannot load badges: %s", err.Error())
 		return
@@ -21,8 +20,8 @@ func iScriptFunctionWebGetBadges(c *iserv.Client, s []string) {
 	}
 }
 
-func iScriptFunctionWebGetNotifications(c *iserv.Client, s []string) {
-	notifications, err := c.Web.GetNotifications()
+func iScriptFunctionWebGetNotifications(s []string) {
+	notifications, err := Client.Web.GetNotifications()
 	if err != nil {
 		Warn("Cannot load notifications: %s", err.Error())
 		return
@@ -37,8 +36,8 @@ func iScriptFunctionWebGetNotifications(c *iserv.Client, s []string) {
 	}
 }
 
-func iScriptFunctionWebGetUpcomingEvents(c *iserv.Client, s []string) {
-	events, err := c.Web.GetUpcomingEvents(30)
+func iScriptFunctionWebGetUpcomingEvents(s []string) {
+	events, err := Client.Web.GetUpcomingEvents(30)
 	if err != nil {
 		Warn("Cannot load events: %s", err.Error())
 		return
@@ -52,8 +51,8 @@ func iScriptFunctionWebGetUpcomingEvents(c *iserv.Client, s []string) {
 	}
 }
 
-func iScriptFunctionWebGetCurrentExercises(c *iserv.Client, s []string) {
-	exercises, err := c.Web.GetCurrentExercises()
+func iScriptFunctionWebGetCurrentExercises(s []string) {
+	exercises, err := Client.Web.GetCurrentExercises()
 	if err != nil {
 		Warn("Cannot load exercises: %s", err.Error())
 		return
@@ -63,8 +62,8 @@ func iScriptFunctionWebGetCurrentExercises(c *iserv.Client, s []string) {
 	}
 }
 
-func iScriptFunctionWebGetPastExercises(c *iserv.Client, s []string) {
-	exercises, err := c.Web.GetPastExercises()
+func iScriptFunctionWebGetPastExercises(s []string) {
+	exercises, err := Client.Web.GetPastExercises()
 	if err != nil {
 		Warn("Cannot load exercises: %s", err.Error())
 		return
@@ -74,8 +73,8 @@ func iScriptFunctionWebGetPastExercises(c *iserv.Client, s []string) {
 	}
 }
 
-func iScriptFunctionEmailListMailboxes(c *iserv.Client, s []string) {
-	mailboxes, err := c.Email.ListMailboxes()
+func iScriptFunctionEmailListMailboxes(s []string) {
+	mailboxes, err := Client.Email.ListMailboxes()
 	if err != nil {
 		Warn("Cannot load email mailboxes: %s", err.Error())
 		return
@@ -85,14 +84,14 @@ func iScriptFunctionEmailListMailboxes(c *iserv.Client, s []string) {
 	}
 }
 
-func iScriptFunctionEmailReadMailbox(c *iserv.Client, s []string) {
+func iScriptFunctionEmailReadMailbox(s []string) {
 	var mb string
 	if len(s) < 1 {
 		mb = "INBOX"
 	} else {
 		mb = s[0]
 	}
-	messages, err := c.Email.ReadMailbox(mb, 50)
+	messages, err := Client.Email.ReadMailbox(mb, 50)
 	if err != nil {
 		Warn("Cannot read messages: %s", err.Error())
 		return
@@ -102,7 +101,7 @@ func iScriptFunctionEmailReadMailbox(c *iserv.Client, s []string) {
 	}
 }
 
-func iScriptFunctionEmailSendMail(c *iserv.Client, s []string) {
+func iScriptFunctionEmailSendMail(s []string) {
 	if len(s) > 3 {
 		Warn("Not enough arguments")
 		return
@@ -116,7 +115,7 @@ func iScriptFunctionEmailSendMail(c *iserv.Client, s []string) {
 		CCs:        []string{},
 		Body:       s[2],
 	}
-	err := c.Email.SendMail(m)
+	err := Client.Email.SendMail(m)
 	if err != nil {
 		Warn("Error sending mail: %s", err.Error())
 	}
