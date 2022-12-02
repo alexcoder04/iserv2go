@@ -5,19 +5,22 @@ on:
   workflow_dispatch:
 
 jobs:
-
   release:
     runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v3
+
+    - name: Git fetch
+      run: "git fetch --tags"
     
     - name: Find latest tag
-      uses: "actions-ecosystem/action-get-latest-tag@v1"
-      id: get-latest-tag
+      id: latest-tag
+      run: |
+        echo "LATEST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
     
     - name: Checkout latest tag
-      run: "git checkout tags/${{ steps.get-latest-tag.outputs.tag }}"
+      run: "git checkout tags/${{ steps.latest-tag.outputs.LATEST_TAG }}"
 
     - name: Set up Go
       uses: "actions/setup-go@v3"
@@ -25,18 +28,14 @@ jobs:
         go-version: 1.18
 
     - name: Build
-      run: make build-all
+      run: "make build-all"
     
     - name: Create Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "${{ steps.get-latest-tag.outputs.tag }}"
+        automatic_release_tag: "${{ steps.latest-tag.outputs.LATEST_TAG }}"
         prerelease: false
-        title: "${{ steps.get-latest-tag.outputs.tag }}"
+        title: "${{ steps.latest-tag.outputs.LATEST_TAG }}"
         files: |
-          build/iserv2go-linux-amd64
-          build/iserv2go-linux-386
-          build/iserv2go-linux-arm
-          build/iserv2go-windows-amd64.exe
-
+          build/*
