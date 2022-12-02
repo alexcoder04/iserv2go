@@ -53,7 +53,8 @@ iserv2go [options] command [arguments...]
 ### Install
 
 ```sh
-go get github.com/alexcoder04/iserv2go/iserv # in your project directory
+# in your project directory
+go get github.com/alexcoder04/iserv2go/iserv
 ```
 
 ### Example usage
@@ -92,7 +93,7 @@ func main(){
     // don't forget to logout
     defer client.Logout()
 
-    // get mails in INBOX
+    // get 10 last mails in INBOX
     messages, err := client.Email.ReadMailbox("INBOX", 10)
     if err != nil {
         return

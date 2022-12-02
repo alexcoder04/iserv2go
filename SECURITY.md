@@ -1,8 +1,9 @@
+
 # Security Policy
 
 ## Supported Versions
 
-Please use our latest release. Older releases may be out-of-date and latest git not stable yet.
+Please use our latest release. Older releases may be out-of-date and the latest git commit not stable yet.
 
 ## Reporting a Vulnerability
 
