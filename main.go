@@ -58,27 +58,7 @@ func main() {
 	}
 
 	// web
-	if *EnableWeb {
-		badges, err := client.Web.GetBadges()
-		if err != nil {
-			Warn("Cannot load badges: %s", err.Error())
-		} else {
-			fmt.Println("Badges:")
-			for key, value := range badges {
-				fmt.Printf("%s: %d\n", key, value)
-			}
-		}
-
-		events, err := client.Web.GetUpcomingEvents(14)
-		if err != nil {
-			Warn("Cannot load upcoming events: %s", err.Error())
-		} else {
-			fmt.Printf("Events (%d):\n", len(events.Events))
-			for _, e := range events.Events {
-				fmt.Printf("%s on %s\n", e.Title, e.When)
-			}
-		}
-	}
+	// now covered by iscript functions
 
 	// email
 	// now covered by iscript functions

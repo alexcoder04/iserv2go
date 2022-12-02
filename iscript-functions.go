@@ -3,11 +3,76 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/alexcoder04/iserv2go/iserv"
 	"github.com/alexcoder04/iserv2go/iserv/iutils"
 	"github.com/alexcoder04/iserv2go/iserv/types"
 )
+
+func iScriptFunctionWebGetBadges(c *iserv.Client, s []string) {
+	badges, err := c.Web.GetBadges()
+	if err != nil {
+		Warn("Cannot load badges: %s", err.Error())
+		return
+	}
+	for key, value := range badges {
+		fmt.Printf("%s: %d\n", key, value)
+	}
+}
+
+func iScriptFunctionWebGetNotifications(c *iserv.Client, s []string) {
+	notifications, err := c.Web.GetNotifications()
+	if err != nil {
+		Warn("Cannot load notifications: %s", err.Error())
+		return
+	}
+	if notifications.Status != "success" {
+		Warn("IServ didn't return success: %s", notifications.Status)
+		return
+	}
+	// TODO
+	for _, n := range notifications.Data.Notifications {
+		fmt.Printf("%v\n", n)
+	}
+}
+
+func iScriptFunctionWebGetUpcomingEvents(c *iserv.Client, s []string) {
+	events, err := c.Web.GetUpcomingEvents(30)
+	if err != nil {
+		Warn("Cannot load events: %s", err.Error())
+		return
+	}
+	if len(events.Errors) > 0 {
+		Warn("IServ returned error: %s", strings.Join(events.Errors, ", "))
+		return
+	}
+	for _, e := range events.Events {
+		fmt.Printf("%v - %v: %s\n", e.Start, e.End, e.Title)
+	}
+}
+
+func iScriptFunctionWebGetCurrentExercises(c *iserv.Client, s []string) {
+	exercises, err := c.Web.GetCurrentExercises()
+	if err != nil {
+		Warn("Cannot load exercises: %s", err.Error())
+		return
+	}
+	for _, e := range exercises {
+		fmt.Printf("%s: %s by %s\n", e.DueDate, e.Title, e.Teacher)
+	}
+}
+
+func iScriptFunctionWebGetPastExercises(c *iserv.Client, s []string) {
+	exercises, err := c.Web.GetPastExercises()
+	if err != nil {
+		Warn("Cannot load exercises: %s", err.Error())
+		return
+	}
+	for _, e := range exercises {
+		fmt.Printf("%s: %s by %s\n", e.DueDate, e.Title, e.Teacher)
+	}
+}
 
 func iScriptFunctionEmailListMailboxes(c *iserv.Client, s []string) {
 	mailboxes, err := c.Email.ListMailboxes()

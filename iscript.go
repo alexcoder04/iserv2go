@@ -7,9 +7,14 @@ import (
 )
 
 var CommandsMap map[string]func(*iserv.Client, []string) = map[string]func(*iserv.Client, []string){
-	"email.list_mailboxes": iScriptFunctionEmailListMailboxes,
-	"email.read_mailbox":   iScriptFunctionEmailReadMailbox,
-	"email.send_mail":      iScriptFunctionEmailSendMail,
+	"email.list_mailboxes":      iScriptFunctionEmailListMailboxes,
+	"email.read_mailbox":        iScriptFunctionEmailReadMailbox,
+	"email.send_mail":           iScriptFunctionEmailSendMail,
+	"web.get_badges":            iScriptFunctionWebGetBadges,
+	"web.get_notifications":     iScriptFunctionWebGetNotifications,
+	"web.get_upcoming_events":   iScriptFunctionWebGetUpcomingEvents,
+	"web.get_current_exercises": iScriptFunctionWebGetCurrentExercises,
+	"web.get_past_exercises":    iScriptFunctionWebGetPastExercises,
 }
 
 func runLine(client iserv.Client, line string) {

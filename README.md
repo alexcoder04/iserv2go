@@ -100,3 +100,8 @@ group.command|argument1 argument2 ...
 |`email.list_mailboxes`|none|get a list of mailboxes|
 |`email.read_mailbox`|`mailbox path`|get last 50 messages from mailbox|
 |`email.send_mail`|`recipient address`, `subject`, `body`|send email|
+|`web.get_badges`|none|get badges (for modules on the nav bar left)|
+|`web.get_notifications`|none|get unread notifications|
+|`web.get_upcoming_events`|none|list of upcoming events|
+|`web.get_current_exercises`|none|list of current exercises|
+|`web.get_past_exercises`|none|list of past exercises|
