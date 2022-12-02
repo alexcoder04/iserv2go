@@ -30,9 +30,3 @@ jobs:
 
     - name: Test
       run: go test -v .
-    
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: binary
-        path: iserv2go
