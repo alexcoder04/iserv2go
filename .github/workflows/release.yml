@@ -1,0 +1,42 @@
+
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Find latest tag
+      uses: "actions-ecosystem/action-get-latest-tag@v1"
+      id: get-latest-tag
+    
+    - name: Checkout latest tag
+      run: "git checkout tags/${{ steps.get-latest-tag.outputs.tag }}"
+
+    - name: Set up Go
+      uses: "actions/setup-go@v3"
+      with:
+        go-version: 1.18
+
+    - name: Build
+      run: make build-all
+    
+    - name: Create Release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "${{ steps.get-latest-tag.outputs.tag }}"
+        prerelease: false
+        title: "${{ steps.get-latest-tag.outputs.tag }}"
+        files: |
+          build/iserv2go-linux-amd64
+          build/iserv2go-linux-386
+          build/iserv2go-linux-arm
+          build/iserv2go-windows-amd64.exe
+
