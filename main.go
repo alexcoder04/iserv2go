@@ -11,6 +11,10 @@ import (
 )
 
 var (
+	VERSION    string = "unknown"
+	COMMIT_SHA string = "unknown"
+
+	Info        *bool = flag.Bool("info", false, "show program info")
 	EnableEmail *bool = flag.Bool("enable-email", false, "whether to enable email module")
 	EnableFiles *bool = flag.Bool("enable-files", false, "whether to enable files module")
 	EnableWeb   *bool = flag.Bool("enable-web", false, "whether to enable web module")
@@ -52,6 +56,11 @@ func Warn(message string, args ...any) {
 }
 
 func main() {
+	if *Info {
+		fmt.Printf("iserv2go %s (commit %s)\n", VERSION, COMMIT_SHA)
+		return
+	}
+
 	Client = iserv.Client{}
 
 	err := Client.Login(&types.AccountConfig{
