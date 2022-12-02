@@ -21,14 +21,18 @@ var (
 )
 
 var CommandsMap map[string]func([]string) = map[string]func([]string){
-	"email.list_mailboxes":      iScriptFunctionEmailListMailboxes,
-	"email.read_mailbox":        iScriptFunctionEmailReadMailbox,
-	"email.send_mail":           iScriptFunctionEmailSendMail,
-	"web.get_badges":            iScriptFunctionWebGetBadges,
-	"web.get_notifications":     iScriptFunctionWebGetNotifications,
-	"web.get_upcoming_events":   iScriptFunctionWebGetUpcomingEvents,
-	"web.get_current_exercises": iScriptFunctionWebGetCurrentExercises,
-	"web.get_past_exercises":    iScriptFunctionWebGetPastExercises,
+	"email.list_mailboxes":      CommandEmailListMailboxes,
+	"email.read_mailbox":        CommandEmailReadMailbox,
+	"email.send_mail":           CommandEmailSendMail,
+	"web.get_badges":            CommandWebGetBadges,
+	"web.get_notifications":     CommandWebGetNotifications,
+	"web.get_upcoming_events":   CommandWebGetUpcomingEvents,
+	"web.get_current_exercises": CommandWebGetCurrentExercises,
+	"web.get_past_exercises":    CommandWebGetPastExercises,
+	"files.ls":                  CommandFilesLs,
+	"files.cat":                 CommandFilesCat,
+	"files.download":            CommandFilesDownload,
+	"files.upload":              CommandFilesUpload,
 }
 
 func init() {
@@ -71,24 +75,6 @@ func main() {
 			CommandsMap[Args[0]](Args[1:])
 		} else {
 			Die("Command '%s' not found", Args[0])
-		}
-		return
-	}
-
-	// web
-	// now covered by command-line functions
-
-	// email
-	// now covered by command-line functions
-
-	// files
-	if *EnableFiles {
-		files, err := Client.Files.ReadDir("/Groups")
-		if err != nil {
-			Warn("Cannot read groups: %s", err.Error())
-		}
-		for _, f := range files {
-			fmt.Println(f.Name())
 		}
 	}
 }

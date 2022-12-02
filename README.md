@@ -35,6 +35,8 @@ go get github.com/alexcoder04/iserv2go/iserv # in your project directory
 package main
 
 import (
+    "fmt"
+
     "github.com/alexcoder04/iserv2go/iserv"
     "github.com/alexcoder04/iserv2go/iserv/types"
 )
@@ -56,7 +58,8 @@ func main(){
 		},
 	})
     if err != nil {
-        panic("failed to login")
+        fmt.Println("failed to login")
+        return
     }
 
     // don't forget to logout
@@ -100,8 +103,12 @@ group.command|argument1 argument2 ...
 |`email.list_mailboxes`|none|get a list of mailboxes|
 |`email.read_mailbox`|`mailbox path`|get last 50 messages from mailbox|
 |`email.send_mail`|`recipient address`, `subject`, `body`|send email|
+|`files.cat`|`filename`|print contents of file|
+|`files.download`|`iserv path`, `local path`|download file from IServ|
+|`files.ls`|`directory`|list of files in directory|
+|`files.upload`|`local path`, `iserv path`|upload file to IServ|
 |`web.get_badges`|none|get badges (for modules on the nav bar left)|
-|`web.get_notifications`|none|get unread notifications|
-|`web.get_upcoming_events`|none|list of upcoming events|
 |`web.get_current_exercises`|none|list of current exercises|
+|`web.get_notifications`|none|get unread notifications|
 |`web.get_past_exercises`|none|list of past exercises|
+|`web.get_upcoming_events`|none|list of upcoming events|
