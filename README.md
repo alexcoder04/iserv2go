@@ -23,7 +23,7 @@ An unofficial Go library and CLI for [IServ](https://iserv.eu/).
 iserv2go [options] command [arguments...]
 ```
 
-## Available options
+### List of options
 
 |Option|Description|
 |---|---|
@@ -113,3 +113,15 @@ They contain each `user.go` files, which include all the functions meant to be u
 
 Contributions are always welcome, there are a lot of things that wait to be implemented, see the [issues](https://github.com/alexcoder04/iserv2go/issues).
 I am also looking for co-maintainers and someone to test the project extensively :)
+
+## Credits
+
+### Contributors
+
+ - [@Redstonerayy](https://github.com/Redstonerayy)
+
+### Libraries
+
+ - [goquery](https://github.com/PuerkitoBio/goquery) - parsing the html pages to extract information
+ - [go-imap](https://github.com/emersion/go-imap) - receive emails
+ - [gowebdav](https://github.com/studio-b12/gowebdav) - work with files
