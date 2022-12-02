@@ -1,6 +1,7 @@
 package email
 
 import (
+	"encoding/base64"
 	"fmt"
 	"strings"
 
@@ -28,12 +29,13 @@ func buildMailBody(mail types.EMail) []byte {
 	return []byte(
 		strings.Join([]string{
 			"MIME-version: 1.0",
-			"Content-Type: text/plain; charset=utf-8",
 			"From: " + iutils.GetNameFromAddress(mail.From) + "<" + mail.From + ">",
 			getToFieldString(mail.To, mail.ToDispName, mail.CCs),
 			"Subject: " + mail.Subject,
+			"Content-Type: text/plain; charset=utf-8",
+			"Content-Transfer-Encoding: base64",
 			"\r\n",
-			mail.Body,
+			base64.StdEncoding.EncodeToString([]byte(mail.Body)),
 		}, "\r\n"),
 	)
 }

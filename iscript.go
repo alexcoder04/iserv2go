@@ -32,6 +32,6 @@ func runLine(client iserv.Client, line string) {
 	if _, ok := CommandsMap[command]; ok {
 		CommandsMap[command](&client, args)
 	} else {
-		Warn("Command '%s' not found", command)
+		Die("Command '%s' not found", command)
 	}
 }
