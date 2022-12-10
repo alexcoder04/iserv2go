@@ -3,6 +3,7 @@ package web
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/alexcoder04/iserv2go/iserv/types"
 )
@@ -11,6 +12,10 @@ func (c *WebClient) GetBadges() (map[string]int, error) {
 	data, err := c.doGetRequest("/app/navigation/badges")
 	if err != nil {
 		return map[string]int{}, err
+	}
+
+	if strings.TrimSpace(string(data)) == "[]" {
+		return map[string]int{}, nil
 	}
 
 	resData := map[string]int{}

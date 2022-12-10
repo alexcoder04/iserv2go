@@ -8,11 +8,11 @@ import (
 )
 
 type FilesClient struct {
-	config    *types.AccountConfig
+	config    *types.ClientConfig
 	davClient *gowebdav.Client
 }
 
-func (c *FilesClient) Login(config *types.AccountConfig) error {
+func (c *FilesClient) Login(config *types.ClientConfig) error {
 	c.config = config
 
 	c.davClient = gowebdav.NewClient(fmt.Sprintf("https://webdav.%s", c.config.IServHost), c.config.Username, c.config.Password)

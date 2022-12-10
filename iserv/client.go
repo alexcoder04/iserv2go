@@ -8,23 +8,21 @@ import (
 )
 
 type Client struct {
-	Config        *types.AccountConfig
-	ClientOptions *types.ClientOptions
+	Config *types.ClientConfig
 
 	Email *email.EmailClient
 	Files *files.FilesClient
 	Web   *web.WebClient
 }
 
-func (c *Client) Login(ac *types.AccountConfig, cc *types.ClientOptions) error {
-	c.Config = ac
-	c.ClientOptions = cc
+func (c *Client) Login(conf *types.ClientConfig) error {
+	c.Config = conf
 
 	// login modules
-	for key, val := range c.ClientOptions.EnableModules {
+	for key, val := range c.Config.EnableModules {
 		if key == "web" && val {
 			c.Web = &web.WebClient{}
-			err := c.Web.Login(c.Config, c.ClientOptions.AgentString)
+			err := c.Web.Login(c.Config)
 			if err != nil {
 				return err
 			}
@@ -51,7 +49,7 @@ func (c *Client) Login(ac *types.AccountConfig, cc *types.ClientOptions) error {
 
 func (c *Client) Logout() error {
 	// logout modules
-	for key, val := range c.ClientOptions.EnableModules {
+	for key, val := range c.Config.EnableModules {
 		if key == "web" && val {
 			err := c.Web.Logout()
 			if err != nil {

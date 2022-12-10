@@ -9,12 +9,12 @@ import (
 )
 
 type EmailClient struct {
-	config     *types.AccountConfig
+	config     *types.ClientConfig
 	imapClient *client.Client
 	smtpAuth   smtp.Auth
 }
 
-func (c *EmailClient) Login(config *types.AccountConfig) error {
+func (c *EmailClient) Login(config *types.ClientConfig) error {
 	c.config = config
 
 	// imap client

@@ -64,7 +64,7 @@ func (c *WebClient) getExercisesFrom(path string) ([]types.Exercise, error) {
 	doc.Find("#crud-table tbody tr").Each(func(i int, s *goquery.Selection) {
 		if !s.HasClass("info") {
 			url, _ := s.Children().Eq(1).Children().First().Attr("href")
-			urls = append(urls, strings.TrimLeft(url, c.iServUrl))
+			urls = append(urls, strings.TrimLeft(url, c.config.IServUrl()))
 		}
 	})
 

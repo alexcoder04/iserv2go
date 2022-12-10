@@ -15,10 +15,11 @@ var (
 	VERSION    string = "unknown"
 	COMMIT_SHA string = "unknown"
 
-	Info        *bool = flag.Bool("info", false, "show program info")
-	EnableEmail *bool = flag.Bool("enable-email", false, "whether to enable email module")
-	EnableFiles *bool = flag.Bool("enable-files", false, "whether to enable files module")
-	EnableWeb   *bool = flag.Bool("enable-web", false, "whether to enable web module")
+	Info         *bool = flag.Bool("info", false, "show program info")
+	EnableEmail  *bool = flag.Bool("enable-email", false, "enable email module")
+	EnableFiles  *bool = flag.Bool("enable-files", false, "enable files module")
+	EnableWeb    *bool = flag.Bool("enable-web", false, "enable web module")
+	SaveSessions *bool = flag.Bool("save-sessions", false, "save login credentials on disk for subsequent logins")
 
 	Args []string
 
@@ -54,16 +55,17 @@ func main() {
 
 	Client = iserv.Client{}
 
-	err := Client.Login(&types.AccountConfig{
+	err := Client.Login(&types.ClientConfig{
 		IServHost: os.Getenv("ISERV_HOST"),
 		Password:  os.Getenv("ISERV_PASSWORD"),
 		Username:  os.Getenv("ISERV_USERNAME"),
-	}, &types.ClientOptions{
+
 		EnableModules: map[string]bool{
 			"email": *EnableEmail,
 			"files": *EnableFiles,
 			"web":   *EnableWeb,
 		},
+		SaveSessions: *SaveSessions,
 	})
 	if err != nil {
 		friendly.Die("Cannot login: %s", err.Error())
