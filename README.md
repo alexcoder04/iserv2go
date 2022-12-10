@@ -75,17 +75,17 @@ func main(){
 
     // login your client
     err := client.Login(&types.ClientConfig{
-		IServHost: os.Getenv("ISERV_HOST"),
-		Username:  os.Getenv("ISERV_USERNAME"),
-		Password:  os.Getenv("ISERV_PASSWORD"),
+        IServHost: os.Getenv("ISERV_HOST"),
+        Username:  os.Getenv("ISERV_USERNAME"),
+        Password:  os.Getenv("ISERV_PASSWORD"),
 
-		EnableModules: map[string]bool{
-			"email": true,
-			"files": false,
-			"web":   false,
-		},
+        EnableModules: map[string]bool{
+            "email": true,
+            "files": false,
+            "web":   false,
+        },
         SaveSessions: true,
-	})
+    })
     if err != nil {
         fmt.Println("failed to login")
         return
