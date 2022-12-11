@@ -38,6 +38,7 @@ func (c *WebClient) Login(config *types.ClientConfig) error {
 	}
 
 	// load credentials if saved
+	// TODO check whether login still valid
 	if c.config.SaveSessions {
 		err := c.loadCredentials()
 		if err == nil {

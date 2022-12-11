@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/alexcoder04/friendly/v2"
 	"github.com/alexcoder04/iserv2go/iserv"
@@ -20,6 +21,7 @@ var (
 	EnableFiles  *bool = flag.Bool("enable-files", false, "enable files module")
 	EnableWeb    *bool = flag.Bool("enable-web", false, "enable web module")
 	SaveSessions *bool = flag.Bool("save-sessions", false, "save login credentials on disk for subsequent logins")
+	Interactive  *bool = flag.Bool("interactive", false, "interactive session")
 
 	Args []string
 
@@ -47,6 +49,14 @@ func init() {
 	Args = flag.Args()
 }
 
+func RunCommand(cmd string, args []string) error {
+	if _, ok := CommandsMap[cmd]; ok {
+		CommandsMap[cmd](args)
+		return nil
+	}
+	return fmt.Errorf("command not found: '%s'", cmd)
+}
+
 func main() {
 	if *Info {
 		fmt.Printf("iserv2go %s (commit %s)\n", VERSION, COMMIT_SHA)
@@ -72,10 +82,26 @@ func main() {
 	}
 	defer Client.Logout()
 
+	if *Interactive {
+		for {
+			inp, err := friendly.Input("iserv> ")
+			if err != nil {
+				friendly.Die("Failed to read command: %s", err.Error())
+			}
+			cmdline := strings.Split(strings.TrimSpace(inp), " ")
+			if cmdline[0] == "exit" {
+				return
+			}
+			err = RunCommand(cmdline[0], cmdline[1:])
+			if err != nil {
+				friendly.Warn("Command '%s' not found", cmdline[0])
+			}
+		}
+	}
+
 	if Args[0] != "" {
-		if _, ok := CommandsMap[Args[0]]; ok {
-			CommandsMap[Args[0]](Args[1:])
-		} else {
+		err := RunCommand(Args[0], Args[1:])
+		if err != nil {
 			friendly.Die("Command '%s' not found", Args[0])
 		}
 	}

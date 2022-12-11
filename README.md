@@ -27,9 +27,12 @@ iserv2go [options] command [arguments...]
 
 |Option|Description|
 |---|---|
-|`enable-email`|enables the email functionality|
-|`enable-files`|enables the files functionality|
-|`enable-web`|enables other functions (notifications, exercises, etc)|
+|`-enable-email`|enables the email functionality|
+|`-enable-files`|enables the files functionality|
+|`-enable-web`|enables other functions (notifications, exercises, etc)|
+|`-info`|shows program info|
+|`-interactive`|starts interactive console where you can type commands instead of passing them as arguments|
+|`-save-sessions`|saves login cookies on the hard drive for subsequent logins|
 
 ### List of commands
 
