@@ -103,7 +103,7 @@ func CommandWebGetPastExercises(s []string) {
 	}
 
 	for _, e := range exercises {
-		fmt.Printf("%s: %s by %s\n", e.DueDate, e.Title, e.Teacher)
+		fmt.Printf("%d: %s: '%s' by %s\n", e.Id, e.DueDate, e.Title, e.Teacher)
 	}
 }
 

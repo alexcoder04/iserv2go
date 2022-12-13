@@ -4,14 +4,15 @@ import "time"
 
 // exercise
 type Exercise struct {
-	Types       []string
-	Title       string
-	DueDate     time.Time
-	StartDate   time.Time
 	Description string
+	DueDate     time.Time
 	Files       []string
+	Id          int
+	StartDate   time.Time
 	Tags        []string
 	Teacher     string
+	Title       string
+	Types       []string
 }
 
 // notification
