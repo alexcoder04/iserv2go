@@ -1,6 +1,8 @@
 package types
 
-import "time"
+import (
+	"time"
+)
 
 // exercise
 type Exercise struct {
@@ -16,7 +18,21 @@ type Exercise struct {
 }
 
 // notification
-type Notification struct{} // TODO
+type Notification struct {
+	Type         string     `json:"type"`
+	Id           int        `json:"id"`
+	GroupId      string     `json:"groupId"`
+	GroupTitle   string     `json:"groupTitle"`
+	AutoGrouping bool       `json:"autoGrouping"`
+	Message      string     `json:"message"`
+	GroupMessage string     `json:"groupMessage"`
+	Title        string     `json:"title"`
+	Content      string     `json:"content"`
+	Trigger      string     `json:"trigger"`
+	Url          string     `json:"url"`
+	Icon         string     `json:"icon"`
+	Date         IServTime1 `json:"date"`
+}
 
 type NotificationData struct {
 	LastEventId   int            `json:"lastEventId"`

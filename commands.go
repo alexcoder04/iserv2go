@@ -64,9 +64,8 @@ func CommandWebGetNotifications(s []string) {
 		friendly.Die("IServ didn't return success: %s", notifications.Status)
 	}
 
-	// TODO
 	for _, n := range notifications.Data.Notifications {
-		fmt.Printf("%v\n", n)
+		fmt.Printf("%v: %s: %s\n", n.Date, n.Title, n.Message)
 	}
 }
 

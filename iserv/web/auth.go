@@ -9,7 +9,7 @@ import (
 	"path"
 )
 
-// TODO add to friendly
+// TODO use the friendly implmentation
 func GetCacheFolder() string {
 	dir, err := os.UserCacheDir()
 	if err != nil {

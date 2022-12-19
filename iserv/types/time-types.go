@@ -1,6 +1,7 @@
 package types
 
 import (
+	"fmt"
 	"strings"
 	"time"
 )
@@ -25,6 +26,10 @@ func (c IServTime1) MarshalJSON() ([]byte, error) {
 	return []byte(`"` + time.Time(c).Format("2006-01-02T15:04:05+01:00") + `"`), nil
 }
 
+func (c IServTime1) Format(f fmt.State, r rune) {
+	f.Write([]byte(time.Time(c).Format("2006-01-02T15:04:05+01:00")))
+}
+
 type IServTime2 time.Time
 
 func (c *IServTime2) UnmarshalJSON(b []byte) error {
@@ -45,4 +50,8 @@ func (c *IServTime2) UnmarshalJSON(b []byte) error {
 
 func (c IServTime2) MarshalJSON() ([]byte, error) {
 	return []byte(`"` + time.Time(c).Format("02.01.2006 15:04") + `"`), nil
+}
+
+func (c IServTime2) Format(f fmt.State, r rune) {
+	f.Write([]byte(time.Time(c).Format("02.01.2006 15:04")))
 }
