@@ -25,8 +25,8 @@ jobs:
     - name: Get changelog
       id: changelog
       run: |
-        git log --pretty=oneline "${{ steps.latest-tag.outputs.SECOND_LATEST_TAG }}...${{ steps.latest-tag.outputs.LATEST_TAG }}" \
-          | cut -d " " -f2- | sed -e 's/^/ - /' >release.md
+        git log --oneline "${{ steps.latest-tag.outputs.SECOND_LATEST_TAG }}..HEAD" \
+          | cut -d " " -f2- | grep -vE '^Merge pull request' | sed -e 's/^/ - /' >release.md
         cat release.md
     
     - name: Checkout latest tag
