@@ -3,8 +3,7 @@ name: Release
 
 on:
   push:
-    tags:
-    - "v*"
+    tags: ["v*"]
 
 jobs:
   release:
@@ -28,9 +27,6 @@ jobs:
         git log --oneline "${{ steps.latest-tag.outputs.SECOND_LATEST_TAG }}..HEAD" \
           | cut -d " " -f2- | grep -vE '^Merge pull request' | sed -e 's/^/ - /' >release.md
         cat release.md
-    
-    - name: Checkout latest tag
-      run: "git checkout tags/${{ steps.latest-tag.outputs.LATEST_TAG }}"
 
     - name: Set up Go
       uses: "actions/setup-go@v3"
