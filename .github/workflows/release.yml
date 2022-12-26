@@ -4,7 +4,7 @@ name: Release
 on:
   push:
     tags:
-    - v*
+    - "v*"
 
 jobs:
   release:
@@ -13,13 +13,19 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Git fetch
+    - name: Git fetch tags
       run: "git fetch --tags"
     
     - name: Find latest tag
       id: latest-tag
       run: |
-        echo "LATEST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+        echo "LATEST_TAG=$(git tag --sort=-version:refname | head -n 1)" >> $GITHUB_OUTPUT
+        echo "SECOND_LATEST_TAG=$(git tag --sort=-version:refname | head -n 2 | tail -n 1)" >> $GITHUB_OUTPUT
+
+    - name: Get changelog
+      id: changelog
+      run: |
+        echo "CHANGELOG=$(git log --pretty=oneline "${{ steps.latest-tag.outputs.SECOND_LATEST_TAG }}...${{ steps.latest-tag.outputs.LATEST_TAG }}" | cut -d " " -f2- | sed -e 's/^/ - /')" >> $GITHUB_OUTPUT
     
     - name: Checkout latest tag
       run: "git checkout tags/${{ steps.latest-tag.outputs.LATEST_TAG }}"
@@ -36,11 +42,8 @@ jobs:
       run: "make build-all"
     
     - name: Create Release
-      uses: "marvinpinto/action-automatic-releases@latest"
+      uses: "ncipollo/release-action@v1"
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "${{ steps.latest-tag.outputs.LATEST_TAG }}"
-        prerelease: false
-        title: "${{ steps.latest-tag.outputs.LATEST_TAG }}"
-        files: |
-          build/*
+        artifacts: "build/*"
+        body: "${{ steps.changelog.outputs.CHANGELOG }}"
+        tag: "${{ steps.latest-tag.outputs.LATEST_TAG }}"
