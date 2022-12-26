@@ -17,4 +17,8 @@
 # .env
 .env
 
+# build results
 build/
+
+# release notes
+release.md

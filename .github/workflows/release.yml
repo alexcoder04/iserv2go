@@ -25,7 +25,8 @@ jobs:
     - name: Get changelog
       id: changelog
       run: |
-        echo "CHANGELOG=$(git log --pretty=oneline "${{ steps.latest-tag.outputs.SECOND_LATEST_TAG }}...${{ steps.latest-tag.outputs.LATEST_TAG }}" | cut -d " " -f2- | sed -e 's/^/ - /')" >> $GITHUB_OUTPUT
+        git log --pretty=oneline "${{ steps.latest-tag.outputs.SECOND_LATEST_TAG }}...${{ steps.latest-tag.outputs.LATEST_TAG }}" \
+          | cut -d " " -f2- | sed -e 's/^/ - /' >release.md
     
     - name: Checkout latest tag
       run: "git checkout tags/${{ steps.latest-tag.outputs.LATEST_TAG }}"
@@ -45,5 +46,5 @@ jobs:
       uses: "ncipollo/release-action@v1"
       with:
         artifacts: "build/*"
-        body: "${{ steps.changelog.outputs.CHANGELOG }}"
+        bodyFile: "release.md"
         tag: "${{ steps.latest-tag.outputs.LATEST_TAG }}"
