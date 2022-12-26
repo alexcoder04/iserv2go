@@ -14,7 +14,7 @@ TAG_NAME="v$VERSION"
 
 # check if version number is in right format
 echo "Checking version for right format..."
-if [ echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$' ]; then
+if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
   echo "Your version number is not in the semver format"
   exit 1
 fi
