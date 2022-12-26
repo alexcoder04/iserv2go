@@ -34,6 +34,10 @@ if [ "$(echo "$LATEST_EXISTING\n$VERSION" | sort -r | head -n 1)" != "$VERSION" 
   exit 1
 fi
 
+# tidy the deps
+echo "Tidying the project dependencies..."
+go mod tidy
+
 # check for unstaged changes
 echo "Checking for unstaged changes..."
 if [ ! -z "$(git status -s)" ]; then
