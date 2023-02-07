@@ -6,7 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/alexcoder04/friendly/v2 v2.1.1
 	github.com/emersion/go-imap v1.2.1
-	github.com/joho/godotenv v1.4.0
+	github.com/joho/godotenv v1.5.1
 	github.com/studio-b12/gowebdav v0.0.0-20221102155456-200a600c0272
 	golang.org/x/net v0.5.0
 )
