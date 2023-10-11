@@ -8,7 +8,7 @@ require (
 	github.com/emersion/go-imap v1.2.1
 	github.com/joho/godotenv v1.5.1
 	github.com/studio-b12/gowebdav v0.9.0
-	golang.org/x/net v0.16.0
+	golang.org/x/net v0.17.0
 )
 
 require (
