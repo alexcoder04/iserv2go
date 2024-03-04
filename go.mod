@@ -3,7 +3,7 @@ module github.com/alexcoder04/iserv2go
 go 1.18
 
 require (
-	github.com/PuerkitoBio/goquery v1.9.0
+	github.com/PuerkitoBio/goquery v1.9.1
 	github.com/alexcoder04/friendly/v2 v2.1.1
 	github.com/emersion/go-imap v1.2.1
 	github.com/joho/godotenv v1.5.1
